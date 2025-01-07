@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.ONEBITMOBLIE" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.ONEBITMOBLIE" parent="android:Theme.Material.Light.NoActionBar">
+    </style>
+    <style name="Theme.One" parent="android:Theme.Material.Light.NoActionBar">
+    </style>
+
 </resources>
