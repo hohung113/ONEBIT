@@ -7,8 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="16dp"
-    android:background="@android:color/white"
-    tools:context=".LoginActivity">
+    android:background="@android:color/white">
 
     <!-- Title -->
     <TextView
