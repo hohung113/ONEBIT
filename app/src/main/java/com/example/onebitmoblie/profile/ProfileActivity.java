@@ -1,19 +1,16 @@
-package com.example.onebitmoblie;
+package com.example.onebitmoblie.profile;
 
 import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-public class LoginActivity extends Activity {
+import com.example.onebitmoblie.R;
+
+public class ProfileActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
-    }
-
-    private void onVisibilityClick()
-    {
-
+        setContentView(R.layout.profiledetail);
     }
 }
