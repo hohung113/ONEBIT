@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".login_register.RegisterActivity"
+            android:exported="true" />
 
     </application>
 
