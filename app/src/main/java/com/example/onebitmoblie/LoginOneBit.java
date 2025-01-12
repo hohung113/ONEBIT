@@ -11,4 +11,9 @@ public class LoginOneBit extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loginonebit);
     }
+
+    private void onVisibilityClick()
+    {
+
+    }
 }
