@@ -30,7 +30,8 @@
       android:drawableStart="@drawable/baseline_option_medium_24"
       android:textColor="@color/white"
       android:gravity="center"
-      android:paddingLeft="10dp"/>
+      android:paddingLeft="10dp"
+      android:text=""/>
 
  </LinearLayout>
 
