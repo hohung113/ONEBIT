@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -15,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_title"
-        android:textColor="@android:color/holo_orange_light"
+        android:textColor="@color/black"
         android:textSize="50sp"
         android:textStyle="bold"
         android:layout_marginBottom="24dp"/>
@@ -25,18 +24,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@android:color/darker_gray"
         android:padding="8dp"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="8dp"
-        android:backgroundTint="@android:color/darker_gray"
+        android:background="@drawable/border_background"
         android:gravity="center_vertical"
         android:minHeight="48dp">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@android:drawable/ic_dialog_email"
+            android:src="@drawable/ic_email"
             android:layout_marginEnd="8dp"
             android:contentDescription="@string/email_icon_description"/>
 
@@ -58,16 +56,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@android:color/darker_gray"
         android:padding="8dp"
         android:layout_marginBottom="16dp"
         android:gravity="center_vertical"
-        android:minHeight="48dp">
+        android:minHeight="48dp"
+        android:background="@drawable/border_background">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@android:drawable/ic_secure"
+            android:src="@drawable/ic_lock"
             android:layout_marginEnd="8dp"
             android:contentDescription="@string/password_icon_description"/>
 
@@ -88,7 +86,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:contentDescription="@string/toggle_password_visibility"
-            android:src="@android:drawable/ic_menu_view"
+            android:src="@drawable/ic_visibility"
             android:background="@android:color/transparent"
             android:padding="12dp"/>
 
@@ -99,9 +97,9 @@
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_orange_light"
+        android:background="@color/mainbackgroundcolor"
         android:text="@string/login"
-        android:textColor="@android:color/black"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"
         android:minHeight="48dp"/>
@@ -118,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/register_question"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="#666666"
             android:textSize="14sp"/>
 
         <TextView
@@ -126,7 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/register"
-            android:textColor="@android:color/holo_blue_light"
+            android:textColor="@color/mainbackgroundcolor"
             android:textStyle="bold"
             android:textSize="14sp"
             android:layout_marginStart="4dp"/>
