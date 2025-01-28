@@ -11,4 +11,17 @@
     <string name="toggle_password_visibility">Toggle password visibility</string>
     <string name="email_icon_description">Email icon</string>
     <string name="password_icon_description">Password icon</string>
+    <string name="new_schedule">New schedule</string>
+    <string name="date">Date</string>
+    <string name="schedule_title_hint">Title *</string>
+    <string name="date_format">dd/mm/yyyy</string>
+    <string name="description">Description</string>
+    <string name="edit">Edit</string>
+    <string name="your_activity">Your Activity</string>
+    <string name="attachment">Attachment</string>
+    <string name="time_format">00:00 AM</string>
+    <string name="activities">Activities</string>
+    <string name="save">Save</string>
+    <string name="back">back</string>
+    <string name="menu">menu</string>
 </resources>
