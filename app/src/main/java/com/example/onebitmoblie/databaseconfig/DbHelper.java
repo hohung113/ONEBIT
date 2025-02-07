@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,7 +54,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     private void copydatabase() throws IOException {
-        InputStream myinput = context.getAssets().open("onebit.db");
+        InputStream myinput = context.getAssets().open(DATABASE_NAME);
 
         String outfilename = DATABASE_PATH;
 
@@ -208,6 +209,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 results.add(cursor.getString(i));
             }
         } catch (Exception e) {
+            Log.d("Errorrrrrr",  e.getMessage());
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();
