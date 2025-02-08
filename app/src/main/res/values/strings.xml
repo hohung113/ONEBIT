@@ -24,4 +24,9 @@
     <string name="save">Save</string>
     <string name="back">back</string>
     <string name="menu">menu</string>
+    <string-array name="priority_levels">
+        <item>High (Red)</item>
+        <item>Medium (Yellow)</item>
+        <item>Low (Green)</item>
+    </string-array>
 </resources>

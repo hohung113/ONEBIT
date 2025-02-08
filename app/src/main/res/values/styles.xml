@@ -1,0 +1,6 @@
+<style name="CustomSpinnerStyle" parent="Widget.AppCompat.Spinner">
+    <item name="android:popupBackground">#FFFFFF</item>
+    <item name="android:dropDownHorizontalOffset">16dp</item>
+    <item name="android:dropDownVerticalOffset">8dp</item>
+    <item name="android:dropDownWidth">match_parent</item>
+</style>
