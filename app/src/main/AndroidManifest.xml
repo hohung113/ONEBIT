@@ -21,7 +21,7 @@
             android:theme="@style/Theme.ONEBITMOBLIE">
 
         </activity>
-        <activity android:name=".homepage.HomeActivity"
+        <activity android:name=".login_register.LoginActivity"
             android:exported="true"
             android:label="ONEBITMOBILE"
             android:theme="@style/Theme.ONEBITMOBLIE">
@@ -35,8 +35,6 @@
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="false"
             ></activity>
-        <activity android:name=".login_register.RegisterActivity">
-        </activity>
     </application>
 
 </manifest>
