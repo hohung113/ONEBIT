@@ -109,6 +109,31 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void insertUser(String name, String email, String password) {
+        SQLiteDatabase db = null;
+        try {
+            db = this.getWritableDatabase();
+            String query = "INSERT INTO Users (Id, Name, Email, Password) VALUES (?, ?, ?, ?)";
+            String userId = java.util.UUID.randomUUID().toString();
+            db.execSQL(query, new String[]{userId, name, email, password});
+            Log.d("DbHelper", "User inserted successfully: " + name);
+        } catch (Exception e) {
+            Log.e("DbHelper", "Error inserting user: " + e.getMessage());
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public boolean isEmailExists(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT 1 FROM Users WHERE Email = ?", new String[]{email});
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+        return exists;
+    }
+
     public List<List> loadDataHandler(String TABLE_NAME, String FILTER, String[] SELECTION_ARGS) {
         List<List> results = new ArrayList<>();
 

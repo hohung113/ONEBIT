@@ -1,13 +1,26 @@
 <resources>
     <string name="app_name">ONEBITMOBLIE</string>
     <string name="app_title">TimeMaster</string>
-
     <string name="email">Email</string>
-    <string name="password">Mật khẩu</string>
+    <string name="password">Password</string>
     <string name="login">ĐĂNG NHẬP</string>
-    <string name="register">ĐĂNG KÝ</string>
+    <string name="register">Register</string>
     <string name="register_question">Chưa có tài khoản?</string>
-
+    <string name="one_bit">OneBit</string>
+    <string name="register_account">Register Account</string>
+    <string name="icon_user">User Icon</string>
+    <string name="icon_phone">Phone Icon</string>
+    <string name="icon_email">Email Icon</string>
+    <string name="job_icon_description">Icon representing current job</string>
+    <string name="current_job">Current Job</string>
+    <string name="icon_lock">Lock Icon</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="logo_description">Clock logo</string>
+    <string name="user_icon_description">User icon</string>
+    <string name="phone_icon_description">Phone icon</string>
+    <string name="lock_icon_description">Lock icon</string>
     <string name="toggle_password_visibility">Toggle password visibility</string>
     <string name="email_icon_description">Email icon</string>
     <string name="password_icon_description">Password icon</string>
