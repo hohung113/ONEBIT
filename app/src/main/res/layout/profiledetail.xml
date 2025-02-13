@@ -7,220 +7,192 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical"
-        >
-        <Button
-            android:layout_width="37dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
-            android:drawableStart="@drawable/baseline_keyboard_backspace_24"
-            android:drawablePadding="0dp"
-            android:padding="0dp" />
+            android:padding="10dp"
+            android:orientation="horizontal"
+            android:gravity="start">
 
-        <TextView
-            android:layout_width="149dp"
-            android:layout_height="wrap_content"
-            android:text="Profile"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="50dp"/>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="btnEditName" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/baseline_keyboard_backspace_24"
+                android:drawablePadding="5dp"
+                android:padding="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <ImageView
-                android:layout_width="108dp"
+                android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
                 android:background="@drawable/circle_border"
                 android:clipToOutline="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/logothethaodep" />
 
             <Button
-                android:layout_width="151dp"
+                android:id="@+id/btnAddImage"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:layout_marginTop="45dp"
                 android:drawableStart="@drawable/baseline_upload_24"
                 android:drawablePadding="8dp"
                 android:text="Add image"
-                android:textAllCaps="false" />
-
+                android:textAllCaps="false"
+                android:layout_marginTop="10dp"/>
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:orientation="vertical"
+            android:padding="10dp">
+
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="5dp">
 
-                <LinearLayout
-                    android:layout_width="252dp"
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:text="Name" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Name" />
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:hint="Enter your name"
+                    android:inputType="textPersonName"/>
 
-                    <EditText
-                        android:layout_width="232dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Ho Phuoc Vinh Hung" />
-                </LinearLayout>
+                <Button
+                    android:id="@+id/btnEditName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/baseline_edit_24" />
             </LinearLayout>
 
-            <Button
-                android:layout_width="39dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/transparent"
-                android:drawableStart="@drawable/baseline_edit_24"
-                android:drawablePadding="0dp"
-                android:padding="0dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="5dp">
 
-                <LinearLayout
-                    android:layout_width="252dp"
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:text="Date of birth" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Date of birth" />
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:hint="DD/MM/YYYY"
+                    android:inputType="date"/>
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Jan 19 , 2004" />
-                </LinearLayout>
+                <Button
+                    android:id="@+id/btnEditDob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/baseline_edit_24" />
             </LinearLayout>
-
-            <Button
-                android:layout_width="39dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/transparent"
-                android:drawableStart="@drawable/baseline_edit_24"
-                android:drawablePadding="0dp"
-                android:padding="0dp" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="5dp">
 
-                <LinearLayout
-                    android:layout_width="252dp"
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:text="Current Job" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Phone" />
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:hint="Enter your current job"
+                    android:inputType="phone"/>
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="12345678900" />
-                </LinearLayout>
+                <Button
+                    android:id="@+id/btnCurrentJob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/baseline_edit_24" />
             </LinearLayout>
-
-            <Button
-                android:layout_width="37dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/transparent"
-                android:drawableStart="@drawable/baseline_edit_24"
-                android:drawablePadding="0dp"
-                android:padding="0dp" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="5dp">
 
-                <LinearLayout
-                    android:layout_width="252dp"
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:text="Gender" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Gender" />
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:hint="Select gender"
+                    android:inputType="text"/>
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Male" />
-                </LinearLayout>
+                <Button
+                    android:id="@+id/btnEditGender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/baseline_edit_24" />
             </LinearLayout>
-
-            <Button
-                android:layout_width="36dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/transparent"
-                android:drawableStart="@drawable/baseline_edit_24"
-                android:drawablePadding="0dp"
-                android:padding="0dp" />
-
         </LinearLayout>
 
     </LinearLayout>
-    <include
-        layout="@layout/footer"
-        />
 
+    <!-- Header với nút Back -->
+
+
+    <!-- Footer -->
+    <include layout="@layout/footer" />
 
 </LinearLayout>
