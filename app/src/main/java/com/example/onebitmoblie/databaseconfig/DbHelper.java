@@ -1,5 +1,6 @@
 package com.example.onebitmoblie.databaseconfig;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -113,10 +114,23 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = null;
         try {
             db = this.getWritableDatabase();
-            String query = "INSERT INTO Users (Id, Name, Email, Password) VALUES (?, ?, ?, ?)";
-            String userId = java.util.UUID.randomUUID().toString();
-            db.execSQL(query, new String[]{userId, name, email, password});
-            Log.d("DbHelper", "User inserted successfully: " + name);
+
+            // Create Users table if not exists
+            createUsersTable();
+
+            ContentValues values = new ContentValues();
+            values.put("Id", java.util.UUID.randomUUID().toString());
+            values.put("Name", name);
+            values.put("Email", email);
+            values.put("Password", password);
+
+            long result = db.insert("Users", null, values);
+
+            if (result == -1) {
+                Log.e("DbHelper", "Failed to insert user");
+            } else {
+                Log.d("DbHelper", "User inserted successfully");
+            }
         } catch (Exception e) {
             Log.e("DbHelper", "Error inserting user: " + e.getMessage());
         } finally {
@@ -132,6 +146,26 @@ public class DbHelper extends SQLiteOpenHelper {
         boolean exists = cursor.moveToFirst();
         cursor.close();
         return exists;
+    }
+
+    public void createUsersTable() {
+        SQLiteDatabase db = null;
+        try {
+            db = this.getWritableDatabase(); // Open database connection
+            String createTableQuery = "CREATE TABLE IF NOT EXISTS Users (" +
+                    "Id TEXT PRIMARY KEY, " +
+                    "Name TEXT NOT NULL, " +
+                    "Email TEXT NOT NULL UNIQUE, " +
+                    "Password TEXT NOT NULL)";
+            db.execSQL(createTableQuery);
+            Log.d("DbHelper", "Users table created successfully.");
+        } catch (Exception e) {
+            Log.e("DbHelper", "Error creating Users table: " + e.getMessage());
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
     }
 
     public List<List> loadDataHandler(String TABLE_NAME, String FILTER, String[] SELECTION_ARGS) {
