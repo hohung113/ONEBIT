@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,27 +15,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ONEBITMOBLIE"
         tools:targetApi="31">
-        <activity
-            android:name=".login_register.RegisterActivity"
-            android:exported="false"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.ONEBITMOBLIE">
 
-        </activity>
-        <activity android:name=".login_register.LoginActivity"
+        <!-- Register Activity -->
+        <activity
+            android:name="com.example.onebitmoblie.login_register.RegisterActivity"
             android:exported="true"
-            android:label="ONEBITMOBILE"
+            android:label="@string/register_account"
             android:theme="@style/Theme.ONEBITMOBLIE">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        
+        <activity android:name=".homepage.HomeActivity"
+            android:exported="false"
+            android:label="ONEBITMOBILE"
+            android:theme="@style/Theme.ONEBITMOBLIE" />
+        
         <activity android:name=".profile.ProfileActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
-            android:exported="false"
-            ></activity>
+            android:exported="false" />
+        
     </application>
 
 </manifest>
