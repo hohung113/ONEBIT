@@ -1,11 +1,18 @@
 package com.example.onebitmoblie.login_register;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,14 +21,18 @@ import androidx.annotation.Nullable;
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.databaseconfig.DbHelper;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.util.List;
 
 public class LoginActivity extends Activity {
     private EditText emailInput, passwordInput;
     private Button loginButton;
+    private ImageButton toggleVisibilityBtn;
     private TextView signupText;
     private DbHelper dbHelper;
+    private boolean isPassVisible = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +43,7 @@ public class LoginActivity extends Activity {
         passwordInput = findViewById(R.id.passwordInput);
         loginButton = findViewById(R.id.loginButton);
         signupText = findViewById(R.id.signupText);
+        toggleVisibilityBtn =  findViewById(R.id.togglePasswordVisibility);
 
         try {
             dbHelper = new DbHelper(this, null);
@@ -39,15 +51,56 @@ public class LoginActivity extends Activity {
             throw new RuntimeException(e);
         }
         loginButton.setOnClickListener(v -> attemptLogin());
-        //signupText.setOnClickListener(v -> goToRegister());
+        toggleVisibilityBtn.setOnClickListener(v->togglePasswordVisibility());
+        signupText.setOnClickListener(v -> goToRegister());
     }
 
+    public void warningPopup(Context context, String message) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View layout = inflater.inflate(R.layout.custom_toast, null);
+
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(message);
+
+        Toast toast = new Toast(context);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    private void goToRegister()
+    {
+        Intent intent = new Intent(this,RegisterActivity.class);
+        startActivity(intent);
+    }
+    private void togglePasswordVisibility()
+    {
+        if(isPassVisible)
+        {
+            passwordInput.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            toggleVisibilityBtn.setImageResource(R.drawable.ic_visibility_off);
+        }
+        else
+        {
+            passwordInput.setTransformationMethod(null);
+            toggleVisibilityBtn.setImageResource(R.drawable.ic_visibility);
+        }
+        isPassVisible = !isPassVisible;
+
+        passwordInput.setSelection(passwordInput.getText().length());
+    }
     private void attemptLogin() {
         String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
 
+        String emptyWarning = "";
+
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập email và mật khẩu", Toast.LENGTH_SHORT).show();
+            emptyWarning = "Vui lòng không để trống";
+            if(email.isEmpty()&&password.isEmpty()) emptyWarning += " email và mật khẩu";
+            else if(email.isEmpty()) emptyWarning += " email";
+            else if(password.isEmpty()) emptyWarning += " mật khẩu";
+            warningPopup(this,emptyWarning);
             return;
         }
 
@@ -59,7 +112,7 @@ public class LoginActivity extends Activity {
             startActivity(new Intent(this, RegisterActivity.class));
             finish();
         } else {
-            Toast.makeText(this, "Email hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
+            warningPopup(this, "Email hoặc mật khẩu không đúng");
         }
 
     }
