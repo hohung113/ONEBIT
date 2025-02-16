@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="#F8F8F8">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,16 +11,24 @@
         android:padding="24dp"
         android:gravity="center">
 
-        <!-- Logo -->
+        <!-- Icon Header -->
+
+        <!-- App Name -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/logo_description"
+            android:src="@drawable/ic_clock_logo"
+            app:tint="#4285F4" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OneBit"
+            android:text="@string/app_name"
             android:textSize="36sp"
-            android:textColor="#FFCC00"
+            android:textColor="#4285F4"
             android:textStyle="bold"
-            android:drawablePadding="10dp"
-            android:drawableTop="@drawable/ic_clock_logo"
             android:gravity="center" />
 
         <!-- Subtitle -->
@@ -28,74 +36,171 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Register an account"
+            android:text="@string/register_account"
             android:textSize="18sp"
             android:textColor="#666666"
             android:gravity="center" />
 
         <!-- Full Name -->
-        <EditText
-            android:id="@+id/edt_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="24dp"
-            android:hint="Full Name"
-            android:padding="12dp"
             android:background="@drawable/rounded_edittext"
-            android:drawableLeft="@drawable/ic_user"
-            android:drawablePadding="12dp" />
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:minHeight="48dp"
+            android:maxWidth="400dp">
 
-        <!-- Phone Number -->
-        <EditText
-            android:id="@+id/edt_phone"
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_user"
+                app:tint="#4285F4"
+                android:contentDescription="@string/user_icon_description" />
+
+            <EditText
+                android:id="@+id/edt_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="textPersonName"
+                android:hint="@string/full_name"
+                android:autofillHints="name"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:background="@null" />
+        </LinearLayout>
+
+        <!-- Current Job -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="16dp"
-            android:hint="Phone Number"
-            android:padding="12dp"
             android:background="@drawable/rounded_edittext"
-            android:drawableLeft="@drawable/ic_phone"
-            android:drawablePadding="12dp"
-            android:inputType="phone" />
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:minHeight="48dp"
+            android:maxWidth="400dp">
+        
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_work"
+                app:tint="#4285F4"
+                android:contentDescription="@string/job_icon_description" />
+        
+            <EditText
+                android:id="@+id/edt_current_job"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/current_job"
+                android:autofillHints="organizationName"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:background="@null"
+                android:inputType="text" />
+        </LinearLayout>
+
 
         <!-- Email -->
-        <EditText
-            android:id="@+id/edt_email"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="16dp"
-            android:hint="Email"
-            android:padding="12dp"
             android:background="@drawable/rounded_edittext"
-            android:drawableLeft="@drawable/ic_email"
-            android:drawablePadding="12dp"
-            android:inputType="textEmailAddress" />
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:minHeight="48dp"
+            android:maxWidth="400dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_email"
+                app:tint="#4285F4"
+                android:contentDescription="@string/email_icon_description" />
+
+            <EditText
+                android:id="@+id/edt_email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints="emailAddress"
+                android:hint="@string/email"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:background="@null"
+                android:inputType="textEmailAddress" />
+        </LinearLayout>
 
         <!-- Password -->
-        <EditText
-            android:id="@+id/edt_password"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="16dp"
-            android:hint="Password"
-            android:padding="12dp"
             android:background="@drawable/rounded_edittext"
-            android:drawableLeft="@drawable/ic_lock"
-            android:drawablePadding="12dp"
-            android:inputType="textPassword" />
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:minHeight="48dp"
+            android:maxWidth="400dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_lock"
+                app:tint="#4285F4"
+                android:contentDescription="@string/lock_icon_description" />
+
+            <EditText
+                android:id="@+id/edt_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/password"
+                android:autofillHints="password"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:background="@null"
+                android:inputType="textPassword" />
+        </LinearLayout>
 
         <!-- Confirm Password -->
-        <EditText
-            android:id="@+id/edt_confirm_password"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="16dp"
-            android:hint="Confirm Password"
-            android:padding="12dp"
             android:background="@drawable/rounded_edittext"
-            android:drawableLeft="@drawable/ic_lock"
-            android:drawablePadding="12dp"
-            android:inputType="textPassword" />
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:minHeight="48dp"
+            android:maxWidth="400dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_lock"
+                app:tint="#4285F4"
+                android:contentDescription="@string/lock_icon_description" />
+
+            <EditText
+                android:id="@+id/edt_confirm_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/confirm_password"
+                android:autofillHints="password"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:background="@null"
+                android:inputType="textPassword" />
+        </LinearLayout>
 
         <!-- Register Button -->
         <Button
@@ -103,11 +208,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:backgroundTint="#FFCC00"
-            android:text="REGISTER"
+            android:backgroundTint="#4285F4"
+            android:text="@string/register"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:padding="12dp" />
-
+            android:padding="12dp"
+            android:minHeight="48dp"
+            android:maxWidth="400dp"
+            android:background="@drawable/rounded_button2" />
     </LinearLayout>
 </ScrollView>
