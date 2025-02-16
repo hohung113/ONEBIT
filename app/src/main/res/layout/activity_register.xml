@@ -168,6 +168,15 @@
                 android:paddingEnd="12dp"
                 android:background="@null"
                 android:inputType="textPassword" />
+
+            <ImageButton
+                android:id="@+id/togglePasswordVisibility"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/toggle_password_visibility"
+                android:src="@drawable/ic_visibility"
+                android:background="@android:color/transparent"
+                android:padding="4dp"/>
         </LinearLayout>
 
         <!-- Confirm Password -->
@@ -181,14 +190,14 @@
             android:padding="12dp"
             android:minHeight="48dp"
             android:maxWidth="400dp">
-
+        
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_lock"
                 app:tint="#4285F4"
                 android:contentDescription="@string/lock_icon_description" />
-
+        
             <EditText
                 android:id="@+id/edt_confirm_password"
                 android:layout_width="0dp"
@@ -200,7 +209,17 @@
                 android:paddingEnd="12dp"
                 android:background="@null"
                 android:inputType="textPassword" />
+        
+            <ImageButton
+                android:id="@+id/toggleConfirmPasswordVisibility"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/toggle_password_visibility"
+                android:src="@drawable/ic_visibility"
+                android:background="@android:color/transparent"
+                android:padding="4dp"/>
         </LinearLayout>
+
 
         <!-- Register Button -->
         <Button
@@ -216,5 +235,20 @@
             android:minHeight="48dp"
             android:maxWidth="400dp"
             android:background="@drawable/rounded_button2" />
+
+        <!-- Login Redirect Button -->
+        <TextView
+            android:id="@+id/tv_login_redirect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Already have an account? Click here to log in"
+            android:textColor="#4285F4"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"/>
+
     </LinearLayout>
 </ScrollView>

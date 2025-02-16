@@ -110,17 +110,18 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertUser(String name, String email, String password) {
+    public void insertUser(String name, String currentJob, String email, String password) {
         SQLiteDatabase db = null;
         try {
             db = this.getWritableDatabase();
 
-            // Create Users table if not exists
+            // Tạo bảng Users nếu chưa tồn tại
             createUsersTable();
 
             ContentValues values = new ContentValues();
             values.put("Id", java.util.UUID.randomUUID().toString());
             values.put("Name", name);
+            values.put("CurrentJob", currentJob); // Thêm trường CurrentJob
             values.put("Email", email);
             values.put("Password", password);
 
@@ -139,6 +140,7 @@ public class DbHelper extends SQLiteOpenHelper {
             }
         }
     }
+
 
     public boolean isEmailExists(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
