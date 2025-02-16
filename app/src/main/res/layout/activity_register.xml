@@ -22,16 +22,16 @@
             android:src="@drawable/ic_clock_logo"
             app:tint="#4285F4" />
 
+        <!-- Subtitle -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="36sp"
+            android:gravity="center"
+            android:text="@string/app_title"
             android:textColor="#4285F4"
-            android:textStyle="bold"
-            android:gravity="center" />
+            android:textSize="36sp"
+            android:textStyle="bold" />
 
-        <!-- Subtitle -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
