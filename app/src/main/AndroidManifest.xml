@@ -18,7 +18,7 @@
 
         <!-- Register Activity -->
         <activity
-            android:name="com.example.onebitmoblie.login_register.RegisterActivity"
+            android:name=".login_register.LoginActivity"
             android:exported="true"
             android:label="@string/register_account"
             android:theme="@style/Theme.ONEBITMOBLIE">
@@ -27,15 +27,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         
-        <activity android:name=".homepage.HomeActivity"
-            android:exported="false"
-            android:label="ONEBITMOBILE"
-            android:theme="@style/Theme.ONEBITMOBLIE" />
+<!--        <activity android:name=".homepage.HomeActivity"-->
+<!--            android:exported="false"-->
+<!--            android:label="ONEBITMOBILE"-->
+<!--            android:theme="@style/Theme.ONEBITMOBLIE" />-->
         
         <activity android:name=".profile.ProfileActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="false" />
+
+        <activity android:name=".login_register.RegisterActivity"
+            android:theme="@style/Theme.ONEBITMOBLIE"
+            android:exported="true" />
         
     </application>
 
