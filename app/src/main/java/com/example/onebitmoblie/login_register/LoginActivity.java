@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.databaseconfig.DbHelper;
+import com.example.onebitmoblie.homepage.HomeActivity;
 
 import org.w3c.dom.Text;
 
@@ -28,9 +29,7 @@ import java.util.List;
 
 public class LoginActivity extends Activity {
     private EditText emailInput, passwordInput;
-    private Button loginButton;
     private ImageButton toggleVisibilityBtn;
-    private TextView signupText;
     private DbHelper dbHelper;
     private boolean isPassVisible = false;
 
@@ -41,8 +40,8 @@ public class LoginActivity extends Activity {
 
         emailInput = findViewById(R.id.emailInput);
         passwordInput = findViewById(R.id.passwordInput);
-        loginButton = findViewById(R.id.loginButton);
-        signupText = findViewById(R.id.signupText);
+        Button loginButton = findViewById(R.id.loginButton);
+        TextView signupText = findViewById(R.id.signupText);
         toggleVisibilityBtn =  findViewById(R.id.togglePasswordVisibility);
 
         try {
@@ -109,8 +108,7 @@ public class LoginActivity extends Activity {
         int countUser = user.size();
         if (checkUser(email, hashedPassword)) {
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, RegisterActivity.class));
-            finish();
+            startActivity(new Intent(this, HomeActivity.class));
         } else {
             warningPopup(this, "Email hoặc mật khẩu không đúng");
         }
