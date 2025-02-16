@@ -16,6 +16,7 @@ import android.content.Intent;
 
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.databaseconfig.DbHelper;
+import com.example.onebitmoblie.homepage.HomeActivity;
 
 import java.util.regex.Pattern;
 
@@ -85,6 +86,14 @@ public class RegisterActivity extends Activity {
         String password = edtPassword.getText().toString().trim();
         String confirmPassword = edtConfirmPassword.getText().toString().trim();
 
+        // set default values
+        int age = 10;
+        int role = 0;
+        String[] words = name.split("\\s+");
+        String lastName = words[words.length - 1];
+        String uName = lastName;
+
+
         if (TextUtils.isEmpty(name)) {
             showAlert("Full Name is required.");
             return;
@@ -117,7 +126,8 @@ public class RegisterActivity extends Activity {
             }
 
             String passwordHash = Integer.toString(password.hashCode());
-            dbHelper.insertUser(name, currentJob, email, passwordHash);
+            dbHelper.insertUser(name,age ,uName,currentJob, email, passwordHash
+            ,role);
 
             Toast.makeText(this, "Registration successful!", Toast.LENGTH_LONG).show();
 

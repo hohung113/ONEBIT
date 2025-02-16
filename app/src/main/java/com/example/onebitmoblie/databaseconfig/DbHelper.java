@@ -3,6 +3,7 @@ package com.example.onebitmoblie.databaseconfig;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -13,8 +14,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
@@ -110,36 +114,45 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertUser(String name, String currentJob, String email, String password) {
+    public void insertUser(String name, int age, String uName, String currentJob, String email, String password, int role) {
         SQLiteDatabase db = null;
         try {
             db = this.getWritableDatabase();
 
-            // Tạo bảng Users nếu chưa tồn tại
-            createUsersTable();
-
             ContentValues values = new ContentValues();
-            values.put("Id", java.util.UUID.randomUUID().toString());
-            values.put("Name", name);
-            values.put("CurrentJob", currentJob); // Thêm trường CurrentJob
+            values.put("UserName", uName);
+            values.put("FullName", name);
+            values.put("Age", Math.max(age, 0));
+            values.put("CurrentJob", currentJob);
             values.put("Email", email);
-            values.put("Password", password);
+            values.put("PasswordHash", password);
+            values.put("Role", Math.max(role, 0));
+            values.put("IsDeleted", 0);
+            values.put("CreatedBy", "System");
 
-            long result = db.insert("Users", null, values);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            values.put("Created_at", sdf.format(new Date()));
+            values.put("Modified_at", sdf.format(new Date()));
 
-            if (result == -1) {
-                Log.e("DbHelper", "Failed to insert user");
-            } else {
-                Log.d("DbHelper", "User inserted successfully");
+            long result = -1;
+            try {
+                result = db.insertOrThrow("Users", null, values);
+            } catch (SQLiteConstraintException e) {
+                Log.e("DbHelper", "Lỗi ràng buộc (UNIQUE, CHECK, NOT NULL): " + e.getMessage());
+            } catch (SQLiteException e) {
+                Log.e("DbHelper", "Lỗi SQLite: " + e.getMessage());
+            } catch (Exception e) {
+                Log.e("DbHelper", "Lỗi khác: " + e.getMessage());
             }
         } catch (Exception e) {
-            Log.e("DbHelper", "Error inserting user: " + e.getMessage());
+            Log.e("DbHelper", "Lỗi khi chèn dữ liệu: " + e.getMessage(), e);
         } finally {
             if (db != null) {
                 db.close();
             }
         }
     }
+
 
 
     public boolean isEmailExists(String email) {
