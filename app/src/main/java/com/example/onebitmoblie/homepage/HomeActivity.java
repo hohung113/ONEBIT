@@ -26,7 +26,6 @@ public class HomeActivity extends Activity {
         btnProfile = findViewById(R.id.btnProfile);
         btnHome.setOnClickListener(view -> startActivity(new Intent(this, HomeActivity.class)));
         btnProfile.setOnClickListener(view -> startActivity(new Intent(this, ProfileActivity.class)));
-
     }
 
 
