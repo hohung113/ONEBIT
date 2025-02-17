@@ -15,6 +15,7 @@ import android.widget.Toast;
 import android.content.Intent;
 
 import com.example.onebitmoblie.R;
+import com.example.onebitmoblie.common.PasswordHelper;
 import com.example.onebitmoblie.databaseconfig.DbHelper;
 import com.example.onebitmoblie.homepage.HomeActivity;
 
@@ -125,7 +126,7 @@ public class RegisterActivity extends Activity {
                 return;
             }
 
-            String passwordHash = Integer.toString(password.hashCode());
+            String passwordHash = PasswordHelper.hashPasswordMD5(password);
             dbHelper.insertUser(name,age ,uName,currentJob, email, passwordHash
             ,role);
 
