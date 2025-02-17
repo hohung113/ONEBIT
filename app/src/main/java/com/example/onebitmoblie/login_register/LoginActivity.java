@@ -19,12 +19,14 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.onebitmoblie.R;
+import com.example.onebitmoblie.common.PasswordHelper;
 import com.example.onebitmoblie.databaseconfig.DbHelper;
 import com.example.onebitmoblie.homepage.HomeActivity;
 
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class LoginActivity extends Activity {
@@ -49,7 +51,13 @@ public class LoginActivity extends Activity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        loginButton.setOnClickListener(v -> attemptLogin());
+        loginButton.setOnClickListener(v -> {
+            try {
+                attemptLogin();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+        });
         toggleVisibilityBtn.setOnClickListener(v->togglePasswordVisibility());
         signupText.setOnClickListener(v -> goToRegister());
     }
@@ -88,7 +96,7 @@ public class LoginActivity extends Activity {
 
         passwordInput.setSelection(passwordInput.getText().length());
     }
-    private void attemptLogin() {
+    private void attemptLogin() throws NoSuchAlgorithmException {
         String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
 
@@ -103,8 +111,10 @@ public class LoginActivity extends Activity {
             return;
         }
 
-        String hashedPassword = password;
+        String hashedPassword = PasswordHelper.hashPasswordMD5(password);
+
         List<String> user = dbHelper.getFirst("Users", "Email = '" + email + "' AND PasswordHash = '" + hashedPassword + "' AND IsDeleted = 0", new String[]{"Id"});
+
         int countUser = user.size();
         if (checkUser(email, hashedPassword)) {
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
