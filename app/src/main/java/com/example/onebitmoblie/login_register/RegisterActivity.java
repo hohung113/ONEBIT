@@ -2,6 +2,7 @@ package com.example.onebitmoblie.login_register;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
@@ -19,9 +20,12 @@ import com.example.onebitmoblie.common.PasswordHelper;
 import com.example.onebitmoblie.databaseconfig.DbHelper;
 import com.example.onebitmoblie.homepage.HomeActivity;
 
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends Activity {
+    DbHelper DBHelper;
+    private SQLiteDatabase db;
 
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{6,}$");
@@ -42,6 +46,9 @@ public class RegisterActivity extends Activity {
 
         Button btnRegister = findViewById(R.id.btn_register);
         TextView tvLoginRedirect = findViewById(R.id.tv_login_redirect);
+
+
+//        DBHelper.syncDataToFirebase();
 
         tvLoginRedirect.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
