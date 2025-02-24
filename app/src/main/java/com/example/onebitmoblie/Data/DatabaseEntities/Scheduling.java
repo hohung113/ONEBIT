@@ -14,10 +14,8 @@ public class Scheduling extends BaseEntity {
     private String description;
     private SchedulingStatus status;
 
-    public Scheduling() {
-    }
-
-    public Scheduling(String title, UUID userId, LocalDateTime fromDate, LocalDateTime toDate, String description, SchedulingStatus status) {
+    public Scheduling(String id, boolean isDeleted, String createdAt, String modifiedAt, String modifiedBy, String title, UUID userId, LocalDateTime fromDate, LocalDateTime toDate, String description, SchedulingStatus status) {
+        super(id, isDeleted, createdAt, modifiedAt, modifiedBy);
         this.title = title;
         this.userId = userId;
         this.fromDate = fromDate;

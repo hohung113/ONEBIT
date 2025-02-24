@@ -4,42 +4,40 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Statistics extends BaseEntity {
-    private UUID userId;
-    private LocalDateTime startTimeToReport;
-    private LocalDateTime endTimeToReport;
+    private String userId;
+    private String startTimeToReport;
+    private String endTimeToReport;
     private String contentReport;
 
-    public Statistics() {
-    }
-
-    public Statistics(UUID userId, LocalDateTime startTimeToReport, LocalDateTime endTimeToReport, String contentReport) {
+    public Statistics(String id, boolean isDeleted, String createdAt, String modifiedAt, String modifiedBy, String userId, String startTimeToReport, String endTimeToReport, String contentReport) {
+        super(id, isDeleted, createdAt, modifiedAt, modifiedBy);
         this.userId = userId;
         this.startTimeToReport = startTimeToReport;
         this.endTimeToReport = endTimeToReport;
         this.contentReport = contentReport;
     }
 
-    public UUID getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public LocalDateTime getStartTimeToReport() {
+    public String getStartTimeToReport() {
         return startTimeToReport;
     }
 
-    public void setStartTimeToReport(LocalDateTime startTimeToReport) {
+    public void setStartTimeToReport(String startTimeToReport) {
         this.startTimeToReport = startTimeToReport;
     }
 
-    public LocalDateTime getEndTimeToReport() {
+    public String getEndTimeToReport() {
         return endTimeToReport;
     }
 
-    public void setEndTimeToReport(LocalDateTime endTimeToReport) {
+    public void setEndTimeToReport(String endTimeToReport) {
         this.endTimeToReport = endTimeToReport;
     }
 
