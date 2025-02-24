@@ -3,42 +3,40 @@ import com.example.onebitmoblie.Data.BaseEntity;
 import java.util.UUID;
 
 public class NotificationLines extends BaseEntity {
-    private UUID notificationId;
-    private UUID schedulingId;
-    private UUID toUserId;
+    private String notificationId;
+    private String schedulingId;
+    private String toUserId;
     private Boolean isRead;
 
-    public NotificationLines() {
-    }
-
-    public NotificationLines(UUID notificationId, UUID schedulingId, UUID toUserId, Boolean isRead) {
+    public NotificationLines(String id, boolean isDeleted, String createdAt, String modifiedAt, String modifiedBy, String notificationId, String schedulingId, String toUserId, Boolean isRead) {
+        super(id, isDeleted, createdAt, modifiedAt, modifiedBy);
         this.notificationId = notificationId;
         this.schedulingId = schedulingId;
         this.toUserId = toUserId;
         this.isRead = isRead;
     }
 
-    public UUID getNotificationId() {
+    public String getNotificationId() {
         return notificationId;
     }
 
-    public void setNotificationId(UUID notificationId) {
+    public void setNotificationId(String notificationId) {
         this.notificationId = notificationId;
     }
 
-    public UUID getSchedulingId() {
+    public String getSchedulingId() {
         return schedulingId;
     }
 
-    public void setSchedulingId(UUID schedulingId) {
+    public void setSchedulingId(String schedulingId) {
         this.schedulingId = schedulingId;
     }
 
-    public UUID getToUserId() {
+    public String getToUserId() {
         return toUserId;
     }
 
-    public void setToUserId(UUID toUserId) {
+    public void setToUserId(String toUserId) {
         this.toUserId = toUserId;
     }
 

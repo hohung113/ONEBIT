@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.HideReturnsTransformationMethod;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +25,7 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends Activity {
-    DbHelper DBHelper;
+    private DbHelper DBHelper;
     private SQLiteDatabase db;
 
     private static final Pattern PASSWORD_PATTERN =
@@ -47,8 +48,16 @@ public class RegisterActivity extends Activity {
         Button btnRegister = findViewById(R.id.btn_register);
         TextView tvLoginRedirect = findViewById(R.id.tv_login_redirect);
 
-
-//        DBHelper.syncDataToFirebase();
+//        try {
+//            DBHelper = new DbHelper(this, null);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        if (DBHelper != null) {
+//            DBHelper.syncDataToFirebase();
+//        } else {
+//            Log.e("DB_ERROR", "DbHelper is null");
+//        }
 
         tvLoginRedirect.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);

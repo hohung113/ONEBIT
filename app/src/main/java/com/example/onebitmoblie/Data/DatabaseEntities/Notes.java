@@ -5,16 +5,14 @@ import com.example.onebitmoblie.Data.BaseEntity;
 import java.util.UUID;
 
 public class Notes extends BaseEntity {
-    private UUID userId;
-    private UUID activityId;
+    private String userId;
+    private String activityId;
     private String title;
     private String content;
     private String fileName;
 
-    public Notes() {
-    }
-
-    public Notes(UUID userId, UUID activityId, String title, String content, String fileName) {
+    public Notes(String id, boolean isDeleted, String createdAt, String modifiedAt, String modifiedBy, String userId, String activityId, String title, String content, String fileName) {
+        super(id, isDeleted, createdAt, modifiedAt, modifiedBy);
         this.userId = userId;
         this.activityId = activityId;
         this.title = title;
@@ -22,19 +20,19 @@ public class Notes extends BaseEntity {
         this.fileName = fileName;
     }
 
-    public UUID getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public UUID getActivityId() {
+    public String getActivityId() {
         return activityId;
     }
 
-    public void setActivityId(UUID activityId) {
+    public void setActivityId(String activityId) {
         this.activityId = activityId;
     }
 

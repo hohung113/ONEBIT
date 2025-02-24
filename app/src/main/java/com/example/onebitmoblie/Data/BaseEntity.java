@@ -4,23 +4,25 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class BaseEntity {
-    private UUID id;
+    private String id;
     private boolean isDeleted;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
-    private UUID modifiedBy;
+    private String createdAt;
+    private String modifiedAt;
+    private String modifiedBy;
 
-    public BaseEntity() {
-        this.id = UUID.randomUUID();
-        this.isDeleted = false;
-        this.createdAt = LocalDateTime.now();
+    public BaseEntity(String id, boolean isDeleted, String createdAt, String modifiedAt, String modifiedBy) {
+        this.id = id;
+        this.isDeleted = isDeleted;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.modifiedBy = modifiedBy;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -32,27 +34,27 @@ public class BaseEntity {
         isDeleted = deleted;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getModifiedAt() {
+    public String getModifiedAt() {
         return modifiedAt;
     }
 
-    public void setModifiedAt(LocalDateTime modifiedAt) {
+    public void setModifiedAt(String modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
 
-    public UUID getModifiedBy() {
+    public String getModifiedBy() {
         return modifiedBy;
     }
 
-    public void setModifiedBy(UUID modifiedBy) {
+    public void setModifiedBy(String modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 }

@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.onebitmoblie.Data.DatabaseEntities.Statistics;
 import com.example.onebitmoblie.Data.DatabaseEntities.TableInfo;
 import com.example.onebitmoblie.Data.DatabaseEntities.Users;
 import com.example.onebitmoblie.Data.Role;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 public class DbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
@@ -301,14 +303,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void syncDataToFirebase() {
         List<TableInfo> tables = new ArrayList<>();
-        tables.add(new TableInfo("Users", new String[]{"userName", "fullName", "passwordHash", "age","email","currentJob","role"}));
+        tables.add(new TableInfo("Users", new String[]{"id","userName", "fullName", "passwordHash", "age","email","currentJob","role","isDeleted","createdAt","modifiedAt","modifiedBy"}));
 //        tables.add(new TableInfo("WorkShift", new String[]{"ShiftID", "ShiftName", "StartTime", "EndTime"}));
 //        tables.add(new TableInfo("Employee", new String[]{"EmployeeID", "EmployeeName", "Phone", "Email"}));
 //        tables.add(new TableInfo("Account", new String[]{"AccountID", "Passwordd", "Email", "EmployeeID"}));
 //        tables.add(new TableInfo("LeaveType", new String[]{"LeaveTypeID", "LeaveTypeName"}));
 //        tables.add(new TableInfo("LeaveRequest", new String[]{"LeaveID", "CreatedTime", "Status", "LeaveTypeID", "EmployeeID", "LeaveStartTime", "LeaveEndTime", "Reason","CountShift"}));
 //        tables.add(new TableInfo("Attendance", new String[]{"AttendanceID", "CreatedTime", "AttendanceType", "EmployeeID", "ShiftID", "PlaceID", "Latitude", "Longitude"}));
-//        tables.add(new TableInfo("LeaveRequestApproval", new String[]{"LeaveApprovalID", "LeaveID", "EmployeeID", "Status"}));
+        tables.add(new TableInfo("Statistics", new String[]{"id", "userId", "startTimeToReport", "endTimeToReport","contentReport","isDeleted","createdAt","modifiedAt","modifiedBy"}));
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -336,8 +338,22 @@ public class DbHelper extends SQLiteOpenHelper {
                     if (validRow) {
                         switch (table.tableName) {
                             case "Users":
-                                Users place = new Users(values[0], (values[1]),(values[2]), Integer.parseInt(values[3]),(values[4]),(values[5]), Role.valueOf((values[6])));
-                                databaseReference.child("users").child(values[0]).setValue(place);
+//                                Users users = new Users(values[0], values[1], values[2], values[3], Integer.parseInt(values[4]), values[5], values[6],Role.fromString(values[7]),Boolean.parseBoolean(values[8]),values[9],values[10],values[11]);
+                                Users users = new Users(
+                                        values[0],  // id
+                                        Boolean.parseBoolean(values[8]), // isDeleted
+                                        values[9],  // createdAt
+                                        values[10], // modifiedAt
+                                        values[11], // modifiedBy
+                                        values[1],  // userName
+                                        values[2],  // fullName
+                                        values[3],  // passwordHash
+                                        Integer.parseInt(values[4]),
+                                        values[5],  // email
+                                        values[6],  // currentJob
+                                        Role.fromString(values[7])
+                                );
+                                databaseReference.child("users").child(values[0]).setValue(users);
                                 break;
 //                            case "WorkShift":
 //                                WorkShift workShift = new WorkShift(values[0], values[1], values[2], values[3]);
@@ -363,10 +379,10 @@ public class DbHelper extends SQLiteOpenHelper {
 //                                Attendance attendance = new Attendance(values[0], values[1], values[2], values[3], values[4], values[5], Double.parseDouble(values[6]), Double.parseDouble(values[7]));
 //                                databaseReference.child("attendances").child(values[0]).setValue(attendance);
 //                                break;
-//                            case "LeaveRequestApproval":
-//                                LeaveRequestApproval leaveRequestApproval = new LeaveRequestApproval(values[0], values[1], values[2], values[3]);
-//                                databaseReference.child("leaverequestapprovals").child(values[0]).setValue(leaveRequestApproval);
-//                                break;
+                            case "Statistics":
+                                Statistics statistics = new Statistics(values[0],Boolean.parseBoolean(values[5]), values[6], values[7], (values[8]), values[1], values[2], values[3],values[4] );
+                                databaseReference.child("statistics").child(values[0]).setValue(statistics);
+                                break;
                         }
                     }
                 } while (cursor.moveToNext());
