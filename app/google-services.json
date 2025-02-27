@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1006072930277",
+    "firebase_url": "https://time-master-6b9d2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "time-master-6b9d2",
+    "storage_bucket": "time-master-6b9d2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006072930277:android:2f1c6e7f0dcb62ec78990c",
+        "android_client_info": {
+          "package_name": "com.example.onebitmoblie"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdQjuDo3TuJWgjocuPWavHV9Y6ffCKOyc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
