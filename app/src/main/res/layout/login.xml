@@ -91,7 +91,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:contentDescription="@string/toggle_password_visibility"
-            android:src="@drawable/ic_visibility"
+            android:src="@drawable/ic_visibility_off"
             android:background="@android:color/transparent"
             android:padding="12dp"/>
 

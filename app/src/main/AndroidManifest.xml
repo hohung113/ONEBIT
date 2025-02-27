@@ -29,10 +29,10 @@
         </activity>
 
         
-<!--        <activity android:name=".homepage.HomeActivity"-->
-<!--            android:exported="false"-->
-<!--            android:label="ONEBITMOBILE"-->
-<!--            android:theme="@style/Theme.ONEBITMOBLIE" />-->
+        <activity android:name=".homepage.HomeActivity"
+            android:exported="false"
+            android:label="ONEBITMOBILE"
+            android:theme="@style/Theme.ONEBITMOBLIE" />
         
         <activity android:name=".profile.ProfileActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"

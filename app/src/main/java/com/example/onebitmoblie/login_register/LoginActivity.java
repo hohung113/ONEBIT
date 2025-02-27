@@ -95,22 +95,21 @@ public class LoginActivity extends Activity {
         String emptyWarning = "";
 
         if (email.isEmpty() || password.isEmpty()) {
-            emptyWarning = "Vui lòng không để trống";
-            if(email.isEmpty()&&password.isEmpty()) emptyWarning += " email và mật khẩu";
+            emptyWarning = "Please do not empty";
+            if(email.isEmpty()&&password.isEmpty()) emptyWarning += " email and password";
             else if(email.isEmpty()) emptyWarning += " email";
-            else if(password.isEmpty()) emptyWarning += " mật khẩu";
+            else emptyWarning += " password";
             warningPopup(this,emptyWarning);
             return;
         }
 
-        String hashedPassword = password;
+        String hashedPassword = /*Integer.toString(password.hashCode());*/password;
         List<String> user = dbHelper.getFirst("Users", "Email = '" + email + "' AND PasswordHash = '" + hashedPassword + "' AND IsDeleted = 0", new String[]{"Id"});
-        int countUser = user.size();
         if (checkUser(email, hashedPassword)) {
-            Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Login successfully!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, HomeActivity.class));
         } else {
-            warningPopup(this, "Email hoặc mật khẩu không đúng");
+            warningPopup(this, "Email or password incorrect!");
         }
 
     }
