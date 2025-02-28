@@ -22,20 +22,25 @@
             android:exported="true"
             android:label="@string/register_account"
             android:theme="@style/Theme.ONEBITMOBLIE">
+
+        </activity>
+        
+        <activity android:name=".homepage.HomeActivity"
+            android:exported="true"
+            android:label="ONEBITMOBILE"
+            android:theme="@style/Theme.ONEBITMOBLIE" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         
-        <activity android:name=".homepage.HomeActivity"
-            android:exported="false"
-            android:label="ONEBITMOBILE"
-            android:theme="@style/Theme.ONEBITMOBLIE" />
-        
         <activity android:name=".profile.ProfileActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="false" />
+        <activity android:name=".Schedule.ScheduleActivity"
+            android:theme="@style/Theme.ONEBITMOBLIE"
+            android:exported="false"></activity>
         
     </application>
 
