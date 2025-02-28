@@ -37,6 +37,8 @@
     <string name="save">Save</string>
     <string name="back">back</string>
     <string name="menu">menu</string>
+    <string name="add_activity">Add activity</string>
+    <string name="remove_activity">Remove activity</string>
     <string-array name="priority_levels">
         <item>High (Red)</item>
         <item>Medium (Yellow)</item>
