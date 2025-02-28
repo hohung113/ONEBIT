@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.onebitmoblie.R;
+import com.example.onebitmoblie.common.SessionManager;
 import com.example.onebitmoblie.databaseconfig.DbHelper;
 import com.example.onebitmoblie.homepage.HomeActivity;
 
@@ -105,8 +106,10 @@ public class LoginActivity extends Activity {
 
         String hashedPassword = /*Integer.toString(password.hashCode());*/password;
         List<String> user = dbHelper.getFirst("Users", "Email = '" + email + "' AND PasswordHash = '" + hashedPassword + "' AND IsDeleted = 0", new String[]{"Id"});
+
         if (checkUser(email, hashedPassword)) {
             Toast.makeText(this, "Login successfully!", Toast.LENGTH_SHORT).show();
+            new SessionManager(this).saveUserData("test","test-id-101");
             startActivity(new Intent(this, HomeActivity.class));
         } else {
             warningPopup(this, "Email or password incorrect!");
@@ -121,5 +124,11 @@ public class LoginActivity extends Activity {
         boolean exists = cursor.moveToFirst();
         cursor.close();
         return exists;
+    }
+
+    public void Logout()
+    {
+        new SessionManager(this).clearData();
+        startActivity(new Intent(this, LoginActivity.class));
     }
 }
