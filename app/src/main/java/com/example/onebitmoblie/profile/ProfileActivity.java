@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -19,10 +20,12 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.onebitmoblie.Helper.ConvertImageBase64;
 import com.example.onebitmoblie.R;
+import com.example.onebitmoblie.Schedule.ScheduleActivity;
 import com.example.onebitmoblie.homepage.HomeActivity;
 
 public class ProfileActivity extends Activity {
     Button btnHome, btnTracking, btnNotification, btnProfile;
+    ImageButton btnFAQ;
     Button btnEditName, btnEditDob, btnCurrentJob, btnEditGender, btnAddImage;
     Uri selectedImageUri; // Lưu ảnh đã chọn
 
@@ -53,7 +56,9 @@ public class ProfileActivity extends Activity {
         btnTracking = findViewById(R.id.btnTracking);
         btnNotification = findViewById(R.id.btnNotification);
         btnProfile = findViewById(R.id.btnProfile);
+        btnFAQ = findViewById(R.id.btnFAQ);
         btnHome.setOnClickListener(view -> startActivity(new Intent(this, HomeActivity.class)));
+        btnFAQ.setOnClickListener(view -> startActivity(new Intent(this, ScheduleActivity.class)));
 
         btnEditName = findViewById(R.id.btnEditName);
         btnEditDob = findViewById(R.id.btnEditDob);
