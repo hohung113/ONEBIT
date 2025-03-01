@@ -32,7 +32,6 @@ public class HomeActivity extends Activity {
         btnProfile.setOnClickListener(view -> startActivity(new Intent(this, ProfileActivity.class)));
         btnFAQ.setOnClickListener(view -> startActivity(new Intent(this, ScheduleActivity.class)));
 
-
     }
 
 

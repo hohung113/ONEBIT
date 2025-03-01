@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">ONEBITMOBLIE</string>
+    <string name="app_name">ONEBIT</string>
     <string name="app_title">TimeMaster</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="login">ĐĂNG NHẬP</string>
+    <string name="login">LOGIN</string>
     <string name="register">Register</string>
-    <string name="register_question">Chưa có tài khoản?</string>
+    <string name="register_question">Dont have an account yet?</string>
     <string name="one_bit">OneBit</string>
     <string name="register_account">Register Account</string>
     <string name="icon_user">User Icon</string>
@@ -37,6 +37,8 @@
     <string name="save">Save</string>
     <string name="back">back</string>
     <string name="menu">menu</string>
+    <string name="add_activity">Add activity</string>
+    <string name="remove_activity">Remove activity</string>
     <string-array name="priority_levels">
         <item>High (Red)</item>
         <item>Medium (Yellow)</item>

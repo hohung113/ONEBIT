@@ -42,6 +42,7 @@
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="false"></activity>
         
+
     </application>
 
 </manifest>
