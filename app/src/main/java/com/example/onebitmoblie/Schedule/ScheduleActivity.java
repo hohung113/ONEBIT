@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.login_register.LoginActivity;
