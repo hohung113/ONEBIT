@@ -1,57 +1,86 @@
 package com.example.onebitmoblie.schedule;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
 import com.example.onebitmoblie.R;
-import com.example.onebitmoblie.login_register.LoginActivity;
 
-public class ScheduleActivity extends Activity{
-    private EditText title;
-    private EditText description;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+public class ScheduleActivity extends Activity {
     private LinearLayout activityContainer;
-    private Button addActivityBtn;
-    private Button saveButton;
+    private TextView dateText;
+    private Calendar calendar;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule);
 
-        title = findViewById(R.id.txt_title);
-        description = findViewById(R.id.txt_description);
         activityContainer = findViewById(R.id.activity_container);
 
-        findViewById(R.id.save_btn).setOnClickListener(v -> onSaveClick());
-        findViewById(R.id.add_activity_btn).setOnClickListener(v -> onAddActivityClick());
+        ImageButton addActivityBtn = findViewById(R.id.add_activity_btn);
+
+        addActivityBtn.setOnClickListener(v -> addNewActivity());
+
+        findViewById(R.id.schedule_date).setOnClickListener(v -> showDatePicker());
     }
 
-    public void onSaveClick()
+    private void showDatePicker()
     {
-        String titleText = title.getText().toString().trim();
-        String desText = description.getText().toString().trim();
+        Calendar today = Calendar.getInstance();
 
-        if(titleText.isEmpty() || desText.isEmpty())
-            new LoginActivity().warningPopup(this,"title and description can not be empty!");
-        else
+        // Create a DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> {
+                    calendar.set(year, month, dayOfMonth);
+                    updateDateText();
+                },
+                today.get(Calendar.YEAR),
+                today.get(Calendar.MONTH),
+                today.get(Calendar.DAY_OF_MONTH)
+        );
+
+        // Restrict selection to today or later
+        datePickerDialog.getDatePicker().setMinDate(today.getTimeInMillis());
+
+        datePickerDialog.show();
+    }
+
+    private void updateDateText()
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        dateText.setText(sdf.format(calendar.getTime()));
+    }
+
+        private void addNewActivity()
         {
-            //save schedule
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View cardView = inflater.inflate(R.layout.activity_card, activityContainer, false);
+
+            View deleteBtn = cardView.findViewById(R.id.remove_card);
+            deleteBtn.setOnClickListener(v -> activityContainer.removeView(cardView));
+
+            activityContainer.addView(cardView, activityContainer.getChildCount() - 1);
         }
-    }
 
-    public void onAddActivityClick()
-    {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View cardView = inflater.inflate(R.layout.activity_card,activityContainer,false);
-        activityContainer.addView(cardView,activityContainer.getChildCount()-1);
-    }
+        private void saveSchedule()
+        {
+
+        }
+
 }
-

@@ -20,7 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.onebitmoblie.Helper.ConvertImageBase64;
 import com.example.onebitmoblie.R;
-import com.example.onebitmoblie.Schedule.ScheduleActivity;
+import com.example.onebitmoblie.schedule.ScheduleActivity;
 import com.example.onebitmoblie.homepage.HomeActivity;
 
 public class ProfileActivity extends Activity {
