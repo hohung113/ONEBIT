@@ -1,5 +1,6 @@
-package com.example.onebitmoblie.schedule;
+package com.example.onebitmoblie.Schedule;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ public class ScheduleActivity extends Activity{
     private Button addActivityBtn;
     private Button saveButton;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
