@@ -1,5 +1,4 @@
 package com.example.onebitmoblie.login_register;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,13 +18,14 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.onebitmoblie.R;
+import com.example.onebitmoblie.common.PasswordHelper;
 import com.example.onebitmoblie.common.SessionManager;
 import com.example.onebitmoblie.databaseconfig.DbHelper;
 import com.example.onebitmoblie.homepage.HomeActivity;
 
-import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class LoginActivity extends Activity {
@@ -104,7 +104,13 @@ public class LoginActivity extends Activity {
             return;
         }
 
-        String hashedPassword = /*Integer.toString(password.hashCode());*/password;
+        //String hashedPassword = /*Integer.toString(password.hashCode());*/password;
+        String hashedPassword = null;
+        try {
+            hashedPassword = PasswordHelper.hashPasswordMD5(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
         List<String> user = dbHelper.getFirst("Users", "Email = '" + email + "' AND PasswordHash = '" + hashedPassword + "' AND IsDeleted = 0", new String[]{"Id"});
 
         if (checkUser(email, hashedPassword)) {
