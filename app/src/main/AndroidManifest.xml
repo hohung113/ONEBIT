@@ -31,15 +31,14 @@
         <activity android:name=".homepage.HomeActivity"
             android:exported="false"
             android:label="ONEBITMOBILE"
-            android:theme="@style/Theme.ONEBITMOBLIE" >
-
+            android:theme="@style/Theme.ONEBITMOBLIE">
         </activity>
         
         <activity android:name=".profile.ProfileActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="false" />
 
-        <activity android:name=".Schedule.ScheduleActivity"
+        <activity android:name=".schedule.ScheduleActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="false"/>
 
