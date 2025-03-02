@@ -9,6 +9,7 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.onebitmoblie.Notification.NotificationActivity;
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.profile.ProfileActivity;
 
@@ -26,6 +27,7 @@ public class HomeActivity extends Activity {
         btnProfile = findViewById(R.id.btnProfile);
         btnHome.setOnClickListener(view -> startActivity(new Intent(this, HomeActivity.class)));
         btnProfile.setOnClickListener(view -> startActivity(new Intent(this, ProfileActivity.class)));
+        btnNotification.setOnClickListener(view -> startActivity(new Intent(this, NotificationActivity.class)));
     }
 
 
