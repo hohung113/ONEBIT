@@ -105,7 +105,7 @@ public class LoginActivity extends Activity {
             return;
         }
 
-        String hashedPassword = /*Integer.toString(password.hashCode());*/password;
+        String hashedPassword = Integer.toString(password.hashCode());;
 
         List<String> user = dbHelper
                 .getFirst("Users", "Email = '" + email + "' AND PasswordHash = '" + hashedPassword + "' AND IsDeleted = 0",
