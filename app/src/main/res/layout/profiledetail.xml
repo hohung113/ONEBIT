@@ -65,7 +65,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:hint="Enter your name"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:id="@+id/txtUsername"/>
 
                 <Button
                     android:id="@+id/btnEditName"
@@ -87,14 +88,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Date of birth" />
+                    android:text="Age" />
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:hint="DD/MM/YYYY"
-                    android:inputType="date" />
+                    android:hint="Age"
+                    android:inputType="date"
+                    android:id="@+id/txtDob"/>
 
                 <Button
                     android:id="@+id/btnEditDob"
@@ -122,7 +124,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:hint="Enter your current job"
-                    android:inputType="phone" />
+                    android:inputType="phone"
+                    android:id="@+id/txtCurrentJob"/>
 
                 <Button
                     android:id="@+id/btnCurrentJob"
@@ -143,14 +146,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Gender" />
+                    android:text="Email" />
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:hint="Select gender"
-                    android:inputType="text" />
+                    android:hint="Email"
+                    android:inputType="text"
+                    android:id="@+id/txtEmail"/>
 
                 <Button
                     android:id="@+id/btnEditGender"
