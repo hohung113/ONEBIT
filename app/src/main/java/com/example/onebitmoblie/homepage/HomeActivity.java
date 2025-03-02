@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.onebitmoblie.R;
-import com.example.onebitmoblie.Schedule.ScheduleActivity;
+import com.example.onebitmoblie.schedule.ScheduleActivity;
 import com.example.onebitmoblie.profile.ProfileActivity;
 
 public class HomeActivity extends Activity {

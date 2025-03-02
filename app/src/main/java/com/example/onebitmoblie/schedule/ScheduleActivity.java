@@ -1,4 +1,4 @@
-package com.example.onebitmoblie.Schedule;
+package com.example.onebitmoblie.schedule;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -64,21 +64,19 @@ public class ScheduleActivity extends Activity {
         dateText.setText(sdf.format(calendar.getTime()));
     }
 
-        private void addNewActivity()
-        {
-            LayoutInflater inflater = LayoutInflater.from(this);
-            View cardView = inflater.inflate(R.layout.activity_card, activityContainer, false);
+    private void addNewActivity()
+    {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View cardView = inflater.inflate(R.layout.activity_card, activityContainer, false);
 
-            View deleteBtn = cardView.findViewById(R.id.remove_card);
-            deleteBtn.setOnClickListener(v -> activityContainer.removeView(cardView));
+        View deleteBtn = cardView.findViewById(R.id.remove_card);
+        deleteBtn.setOnClickListener(v -> activityContainer.removeView(cardView));
 
-            activityContainer.addView(cardView, activityContainer.getChildCount() - 1);
-        }
+        activityContainer.addView(cardView, activityContainer.getChildCount() - 1);
+    }
 
-        private void saveSchedule()
-        {
-
-        }
+    private void saveSchedule()
+    {
 
     }
 }
