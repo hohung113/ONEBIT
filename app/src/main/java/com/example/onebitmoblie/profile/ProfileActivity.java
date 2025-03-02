@@ -64,7 +64,7 @@ public class ProfileActivity extends Activity {
         btnEditDob = findViewById(R.id.btnEditDob);
         btnCurrentJob = findViewById(R.id.btnCurrentJob);
         btnEditGender = findViewById(R.id.btnEditGender);
-        btnAddImage = findViewById(R.id.btnAddImage);
+
 
         btnEditName.setOnClickListener(view -> showEditDialog("Edit Name", "Enter your name"));
         btnEditDob.setOnClickListener(view -> showEditDialog("Edit Date of Birth", "Enter your date of birth"));

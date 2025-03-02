@@ -1,5 +1,6 @@
-package com.example.onebitmoblie.schedule;
+package com.example.onebitmoblie.Schedule;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.icu.util.Calendar;
@@ -12,10 +13,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 
 import com.example.onebitmoblie.R;
-
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -23,8 +22,6 @@ public class ScheduleActivity extends Activity {
     private LinearLayout activityContainer;
     private TextView dateText;
     private Calendar calendar;
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,4 +80,5 @@ public class ScheduleActivity extends Activity {
 
         }
 
+    }
 }
