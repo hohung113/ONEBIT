@@ -16,10 +16,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
 
+import com.example.onebitmoblie.Data.DatabaseEntities.Users;
+import com.example.onebitmoblie.Data.Role;
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.common.PasswordHelper;
 import com.example.onebitmoblie.databaseconfig.DbHelper;
 import com.example.onebitmoblie.homepage.HomeActivity;
+import com.example.onebitmoblie.profile.ProfileActivity;
+import com.example.onebitmoblie.settings.SettingActivity;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -103,14 +109,6 @@ public class RegisterActivity extends Activity {
         String password = edtPassword.getText().toString().trim();
         String confirmPassword = edtConfirmPassword.getText().toString().trim();
 
-        // set default values
-        int age = 10;
-        int role = 0;
-        String[] words = name.split("\\s+");
-        String lastName = words[words.length - 1];
-        String uName = lastName;
-
-
         if (TextUtils.isEmpty(name)) {
             showAlert("Full Name is required.");
             return;
@@ -143,20 +141,33 @@ public class RegisterActivity extends Activity {
             }
 
             String passwordHash = PasswordHelper.hashPasswordMD5(password);
-            dbHelper.insertUser(name,age ,uName,currentJob, email, passwordHash
-            ,role);
+            String userId = java.util.UUID.randomUUID().toString();
 
-            Toast.makeText(this, "Registration successful!", Toast.LENGTH_LONG).show();
+            // Default
+            int age = 10;
+            int role = 1;
+            boolean deleted = false;
+            String createdAt = java.time.Instant.now().toString();
+            String modifiedAt = createdAt;
+            String modifiedBy = userId;
 
-            edtName.setText("");
-            edtCurrentJob.setText("");
-            edtEmail.setText("");
-            edtPassword.setText("");
-            edtConfirmPassword.setText("");
+            String[] words = name.split("\\s+");
+            String userName = words[words.length - 1];
+            Users newUser = new Users(userId,deleted,createdAt,modifiedAt,modifiedBy,userName,name,passwordHash,age,email,currentJob, Role.NORMAL_USER);
+
+            saveUserToFirebase(newUser);
+
         } catch (Exception e) {
             showAlert("Registration failed: " + e.getMessage());
         }
     }
+
+    private void comeBackLogin() {
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 
     private void showAlert(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
@@ -166,4 +177,18 @@ public class RegisterActivity extends Activity {
                 .create()
                 .show();
     }
+
+    private void saveUserToFirebase(Users user) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
+        databaseReference.child(user.getId()).setValue(user)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(RegisterActivity.this, "User registered successfully!", Toast.LENGTH_LONG).show();
+                    comeBackLogin();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(RegisterActivity.this, "Failed to register user: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+    }
+
 }

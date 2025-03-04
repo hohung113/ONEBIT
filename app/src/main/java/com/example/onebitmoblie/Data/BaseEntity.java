@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class BaseEntity {
-    private String id;
-    private boolean isDeleted;
-    private String createdAt;
-    private String modifiedAt;
-    private String modifiedBy;
+    public String id;
+    public boolean isDeleted;
+    public String createdAt;
+    public String modifiedAt;
+    public String modifiedBy;
 
     public BaseEntity(String id, boolean isDeleted, String createdAt, String modifiedAt, String modifiedBy) {
         this.id = id;

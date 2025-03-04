@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import androidx.annotation.Nullable;
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.profile.ProfileActivity;
+import com.example.onebitmoblie.settings.SettingActivity;
 
 public class HomeActivity extends Activity {
     Button btnHome, btnTracking, btnNotification ,btnProfile ;
@@ -27,5 +28,10 @@ public class HomeActivity extends Activity {
 //        btnHome.setOnClickListener(view -> startActivity(new Intent(this, HomeActivity.class)));
         btnProfile.setOnClickListener(view -> startActivity(new Intent(this, ProfileActivity.class)));
         //btnFAQ.setOnClickListener(view -> startActivity(new Intent(this, ScheduleActivity.class)));
+    }
+
+    public void openSettings(android.view.View view){
+        Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
+        startActivity(intent);
     }
 }

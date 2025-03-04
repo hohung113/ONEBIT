@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F8F8F8"
-    tools:context=".SettingsActivity">
+    android:background="#F8F8F8">
+<!--    tools:context=".SettingsActivity">-->
 
     <!-- Top App Bar -->
     <androidx.appcompat.widget.Toolbar
@@ -26,7 +26,8 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_back"
                 app:tint="#FFFFFF"
-                android:layout_marginStart="16dp" />
+                android:layout_marginStart="16dp"
+                android:onClick="goBack"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -74,7 +75,8 @@
                     android:layout_weight="1"
                     android:text="Account"
                     android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:onClick="comeProfile"/>
 
                 <ImageView
                     android:layout_width="36dp"
