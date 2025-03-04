@@ -16,6 +16,14 @@ public class Notifications extends BaseEntity {
         this.content = content;
         this.type = type;
     }
+    public Notifications() {
+        super(null, false, null, null, null);  // Gọi constructor của class cha
+        this.title = "";
+        this.content = "";
+        this.type = NotificationType.SYSTEM; // Hoặc giá trị mặc định phù hợp
+    }
+
+
 
     public String getTitle() {
         return title;
