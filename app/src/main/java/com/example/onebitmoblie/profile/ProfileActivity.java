@@ -96,6 +96,9 @@ public class ProfileActivity extends Activity {
             Toast.makeText(this, "Failed to load user data.", Toast.LENGTH_SHORT).show();
         }
     }
+    public void goBack(android.view.View view){
+        onBackPressed();
+    }
 
     private void showEditDialog(String title, String hint, String currentValue, TextView textView, String dbColumn) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
