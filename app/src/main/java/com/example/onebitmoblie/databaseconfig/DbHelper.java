@@ -40,6 +40,8 @@ public class DbHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
         DATABASE_PATH = context.getDatabasePath(DATABASE_NAME).getAbsolutePath();
         this.context = context;
+        Log.d("DbHelper", "Database Path: " + DATABASE_PATH);
+
         boolean dbexist = checkdatabase();
         if (dbexist) {
             open();

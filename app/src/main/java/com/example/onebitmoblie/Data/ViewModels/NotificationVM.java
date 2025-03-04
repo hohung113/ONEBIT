@@ -5,20 +5,27 @@ import com.example.onebitmoblie.Data.NotificationType;
 import kotlin.text.UStringsKt;
 
 public class NotificationVM {
+    private String notificationId;
+    private String schedulingId;
     private String title;
     private String content;
     private NotificationType notificationType;
     private String createdAt;
     private String modifiedAt;
-    private boolean isCreated;
+    private boolean isCreated;//isREAd
 
-    public NotificationVM(String title, String content, NotificationType notificationType, String createAt, String modifiedAt, boolean isCreated) {
+    public NotificationVM(String notificationId, String schedulingId, String title, String content, NotificationType notificationType, String createdAt, String modifiedAt, boolean isCreated) {
+        this.notificationId = notificationId;
+        this.schedulingId = schedulingId;
         this.title = title;
         this.content = content;
         this.notificationType = notificationType;
-        this.createdAt = createAt;
+        this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.isCreated = isCreated;
+    }
+    public NotificationVM(){
+
     }
 
     public String getTitle() {
@@ -67,5 +74,21 @@ public class NotificationVM {
 
     public void setCreated(boolean created) {
         isCreated = created;
+    }
+
+    public String getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(String notificationId) {
+        this.notificationId = notificationId;
+    }
+
+    public String getSchedulingId() {
+        return schedulingId;
+    }
+
+    public void setSchedulingId(String schedulingId) {
+        this.schedulingId = schedulingId;
     }
 }

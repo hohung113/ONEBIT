@@ -2,6 +2,7 @@ package com.example.onebitmoblie.Notification;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 
@@ -18,12 +19,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.onebitmoblie.Adapter.NotificationAdapter;
+import com.example.onebitmoblie.DAO.NotificationDAO;
+import com.example.onebitmoblie.DAO.NotificationLineDAO;
+import com.example.onebitmoblie.Data.DatabaseEntities.NotificationLines;
+import com.example.onebitmoblie.Data.DatabaseEntities.Notifications;
 import com.example.onebitmoblie.Data.NotificationType;
 import com.example.onebitmoblie.Data.ViewModels.NotificationVM;
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.homepage.HomeActivity;
 import com.example.onebitmoblie.profile.ProfileActivity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +39,23 @@ public class NotificationActivity extends AppCompatActivity {
     private List<NotificationVM> notificationVMS;
     private NotificationAdapter notificationAdapter;
     Button btnHome, btnTracking ,btnProfile ;
+    private NotificationDAO notificationDAO;
+    private NotificationLineDAO notificationLineDAO;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_notification);
+        //setup DB
+        try {
+            notificationDAO = new NotificationDAO(this);
+            notificationLineDAO = new NotificationLineDAO(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,25 +69,54 @@ public class NotificationActivity extends AppCompatActivity {
             int whiteColor = ContextCompat.getColor(this, R.color.white);
             toolbar.getNavigationIcon().setTint(whiteColor);
         }
+        //setup data of notifications
+//        long notiId1 = notificationDAO.insertNotification(new Notifications(
+//                "a1b2c3d4e5f67890abcdef1234567890",  // ID mới
+//                false,
+//                "2024-03-01 10:30:00",
+//                "2024-03-01 12:00:00",
+//                "admin",
+//                "System Update",
+//                "The system will undergo maintenance at midnight.",
+//                NotificationType.SYSTEM
+//        ));
+//        long notiId2 = notificationDAO.insertNotification(new Notifications(
+//                "9f8e7d6c5b4a3210abcdef0123456789",  // ID mới
+//                false,  // Đã bị xóa (isDeleted = true)
+//                "2024-03-03 14:45:00",
+//                "2024-03-03 15:10:00",
+//                "teacher",
+//                "New Assignment Posted",
+//                "A new assignment has been uploaded for your course.",
+//                NotificationType.SCHEDULES
+//        ));
+        List<Notifications> notifications = notificationDAO.getAllNotifications();
+        for (Notifications notification: notifications) {
+            Log.d("NotificationCheck", "ID: " + notification.getId() + " | Content: " + notification.getContent());
+        }
+        ;
+        //setup data of notificationLine
 
         //set list recycle view
         rcvNotification = findViewById(R.id.recyclerView);
         notificationVMS = new ArrayList<>();
-
-        notificationVMS.add(new NotificationVM("Meeting Reminder", "You have a meeting at 10 AM",
-                NotificationType.SCHEDULES, "2025-03-01 08:00", "2025-03-01 08:05", true));
-
-        notificationVMS.add(new NotificationVM("System Update", "A new system update is available",
-                NotificationType.SYSTEM, "2025-03-01 09:30", "2025-03-01 09:35", false));
-
-        notificationVMS.add(new NotificationVM("Event Invitation", "You are invited to the annual company party",
-                NotificationType.SCHEDULES, "2025-03-02 14:00", "2025-03-02 14:05", false));
-
-        notificationVMS.add(new NotificationVM("Security Alert", "Unusual login detected from a new device",
-                NotificationType.SYSTEM, "2025-03-02 18:45", "2025-03-02 18:50", true));
-
-        notificationVMS.add(new NotificationVM("Schedule Change", "Your appointment has been rescheduled to 3 PM",
-                NotificationType.SCHEDULES, "2025-03-03 10:15", "2025-03-03 10:20", true));
+//        List<NotificationLines> notificationLines = notificationLineDAO.getByToUserId("bcf32912bfc1acd8c4245461554c4cf6");
+//        if(notificationLines!=null){
+//            for (NotificationLines notificationLine : notificationLines){
+//                Notifications notification = notificationDAO.getNotificationsById(notificationLine.getNotificationId());
+//                NotificationVM notificationVM = new NotificationVM();
+//                notificationVM.setNotificationId(notificationLine.getNotificationId());
+//                notificationVM.setSchedulingId(notificationLine.getSchedulingId());
+//                notificationVM.setTitle(notification.getTitle());
+//                notificationVM.setContent(notification.getContent());
+//                notificationVM.setNotificationType(notification.getType());
+//                notificationVM.setCreatedAt(notification.getCreatedAt());
+//                notificationVM.setModifiedAt(notification.getModifiedAt());
+//                notificationVM.setCreated(notificationLine.getIsRead());
+//                notificationVMS.add(notificationVM);
+//            }
+//
+//        }
 
 
         notificationAdapter = new NotificationAdapter(notificationVMS);
