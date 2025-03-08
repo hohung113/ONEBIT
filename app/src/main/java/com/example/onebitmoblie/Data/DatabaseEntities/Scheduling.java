@@ -8,13 +8,13 @@ import java.util.UUID;
 
 public class Scheduling extends BaseEntity {
     private String title;
-    private UUID userId;
-    private LocalDateTime fromDate;
-    private LocalDateTime toDate;
+    private String userId;
+    private String fromDate;
+    private String toDate;
     private String description;
     private SchedulingStatus status;
 
-    public Scheduling(String id, boolean isDeleted, String createdAt, String modifiedAt, String modifiedBy, String title, UUID userId, LocalDateTime fromDate, LocalDateTime toDate, String description, SchedulingStatus status) {
+    public Scheduling(String id, boolean isDeleted, String createdAt, String modifiedAt, String modifiedBy, String title, String userId, String fromDate, String toDate, String description, SchedulingStatus status) {
         super(id, isDeleted, createdAt, modifiedAt, modifiedBy);
         this.title = title;
         this.userId = userId;
@@ -32,27 +32,27 @@ public class Scheduling extends BaseEntity {
         this.title = title;
     }
 
-    public UUID getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public LocalDateTime getFromDate() {
+    public String getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(LocalDateTime fromDate) {
+    public void setFromDate(String fromDate) {
         this.fromDate = fromDate;
     }
 
-    public LocalDateTime getToDate() {
+    public String getToDate() {
         return toDate;
     }
 
-    public void setToDate(LocalDateTime toDate) {
+    public void setToDate(String toDate) {
         this.toDate = toDate;
     }
 

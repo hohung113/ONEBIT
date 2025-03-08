@@ -6,11 +6,11 @@ import com.example.onebitmoblie.Data.NotificationType;
 import java.util.UUID;
 
 public class Notifications extends BaseEntity {
-    private String title;
-    private String content;
-    private NotificationType type;
+    public String title;
+    public String content;
+    public NotificationType type;
 
-    public Notifications(String id, boolean isDeleted, String createdAt, String modifiedAt, String modifiedBy, String title, String content, NotificationType type) {
+    public Notifications(String id,String title, String content,NotificationType type, boolean isDeleted, String createdAt, String modifiedAt, String modifiedBy) {
         super(id, isDeleted, createdAt, modifiedAt, modifiedBy);
         this.title = title;
         this.content = content;
