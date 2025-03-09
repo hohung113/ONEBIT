@@ -1,5 +1,4 @@
 package com.example.onebitmoblie.login_register;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,12 +17,13 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.example.onebitmoblie.Data.DatabaseEntities.Users;
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.common.PasswordHelper;
+import com.example.onebitmoblie.common.SessionManager;
 import com.example.onebitmoblie.databaseconfig.DbHelper;
 import com.example.onebitmoblie.homepage.HomeActivity;
 
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -51,13 +51,7 @@ public class LoginActivity extends Activity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        loginButton.setOnClickListener(v -> {
-            try {
-                attemptLogin();
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        loginButton.setOnClickListener(v -> attemptLogin());
         toggleVisibilityBtn.setOnClickListener(v->togglePasswordVisibility());
         signupText.setOnClickListener(v -> goToRegister());
     }
@@ -96,41 +90,42 @@ public class LoginActivity extends Activity {
 
         passwordInput.setSelection(passwordInput.getText().length());
     }
-    private void attemptLogin() throws NoSuchAlgorithmException {
+    private void attemptLogin() {
         String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
 
         String emptyWarning = "";
 
         if (email.isEmpty() || password.isEmpty()) {
-            emptyWarning = "Vui lòng không để trống";
-            if(email.isEmpty()&&password.isEmpty()) emptyWarning += " email và mật khẩu";
+            emptyWarning = "Please do not empty";
+            if(email.isEmpty()&&password.isEmpty()) emptyWarning += " email and password";
             else if(email.isEmpty()) emptyWarning += " email";
-            else if(password.isEmpty()) emptyWarning += " mật khẩu";
+            else emptyWarning += " password";
             warningPopup(this,emptyWarning);
             return;
         }
 
-        String hashedPassword = PasswordHelper.hashPasswordMD5(password);
+        String hashedPassword = null;
+        try {
+            hashedPassword = PasswordHelper.hashPasswordMD5(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+      
+        List<String> user = dbHelper
+                .getFirst("Users", "Email = '" + email + "' AND PasswordHash = '" + hashedPassword + "' AND IsDeleted = 0",
+                        new String[]{"Id","userName"});
 
-        List<String> user = dbHelper.getFirst("Users", "Email = '" + email + "' AND PasswordHash = '" + hashedPassword + "' AND IsDeleted = 0", new String[]{"Id"});
-
-        int countUser = user.size();
-        if (checkUser(email, hashedPassword)) {
-            Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+        if (user!= null) {
+            new SessionManager(this).saveUserData(user.get(1),user.get(0));
             startActivity(new Intent(this, HomeActivity.class));
         } else {
-            warningPopup(this, "Email hoặc mật khẩu không đúng");
+            warningPopup(this, "Email or password incorrect!");
         }
-
     }
-
-    private boolean checkUser(String email, String hashedPassword) {
-        String query = "SELECT Id FROM Users WHERE Email = ? AND PasswordHash = ? AND IsDeleted = 0";
-        Cursor cursor = dbHelper.getReadableDatabase().rawQuery(query, new String[]{email, hashedPassword});
-
-        boolean exists = cursor.moveToFirst();
-        cursor.close();
-        return exists;
+    public void Logout()
+    {
+        new SessionManager(this).clearData();
+        startActivity(new Intent(this, LoginActivity.class));
     }
 }

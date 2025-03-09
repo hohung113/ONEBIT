@@ -275,33 +275,62 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public List<String> getFirst(String TABLE_NAME, String FILTER, String[] SELECTION_ARGS) {
         List<String> results = new ArrayList<>();
-
-        String query = "SELECT * FROM " + TABLE_NAME;
-        if (SELECTION_ARGS != null) {
-            query = "SELECT " + String.join(", ", SELECTION_ARGS) + " FROM " + TABLE_NAME;
-        }
-        if (FILTER != null) {
-            query += " WHERE " + FILTER;
-        }
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
+
         try {
+            String query = "SELECT * FROM " + TABLE_NAME;
+            if (SELECTION_ARGS != null && SELECTION_ARGS.length > 0) {
+                query = "SELECT " + String.join(", ", SELECTION_ARGS) + " FROM " + TABLE_NAME;
+            }
+            if (FILTER != null) {
+                query += " WHERE " + FILTER;
+            }
+
             cursor = db.rawQuery(query, null);
-            cursor.moveToFirst();
-            for (int i = 0; i < cursor.getColumnCount(); i++) {
-                results.add(cursor.getString(i));
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    for (int i = 0; i < cursor.getColumnCount(); i++) {
+                        results.add(cursor.getString(i));
+                    }
+                } while (cursor.moveToNext());
             }
         } catch (Exception e) {
-            Log.d("Errorrrrrr",  e.getMessage());
+            Log.e("Errorrrrrr", "Query failed: " + e.getMessage());
         } finally {
-            if (cursor != null && !cursor.isClosed()) {
-                cursor.close();
-            }
+            if (cursor != null) cursor.close();
+            db.close();
         }
-        db.close();
+
         return results;
     }
+    public List<String> getFirstDetails(String TABLE_NAME, String FILTER, String[] FILTER_ARGS, String[] SELECTION_ARGS) {
+        List<String> results = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            String query = "SELECT " + String.join(", ", SELECTION_ARGS) + " FROM " + TABLE_NAME + " WHERE " + FILTER;
+            cursor = db.rawQuery(query, FILTER_ARGS);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    for (int i = 0; i < cursor.getColumnCount(); i++) {
+                        results.add(cursor.getString(i));
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DB_ERROR", "Query failed: " + e.getMessage());
+        } finally {
+            if (cursor != null) cursor.close();
+            db.close();
+        }
+
+        return results;
+    }
+
 
     public void syncDataToFirebase() {
         List<TableInfo> tables = new ArrayList<>();
