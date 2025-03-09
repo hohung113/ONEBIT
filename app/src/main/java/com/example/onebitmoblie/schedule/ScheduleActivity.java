@@ -1,25 +1,38 @@
-package com.example.onebitmoblie.schedule;
-
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 
+import com.example.onebitmoblie.Data.DatabaseEntities.Scheduling;
+import com.example.onebitmoblie.Data.SchedulingStatus;
 import com.example.onebitmoblie.R;
-import com.example.onebitmoblie.login_register.LoginActivity;
+import com.example.onebitmoblie.common.PopupHelper;
+import com.example.onebitmoblie.common.SessionManager;
+import com.example.onebitmoblie.homepage.HomeActivity;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class ScheduleActivity extends Activity{
-    private EditText title;
-    private EditText description;
+import java.util.UUID;
+
+public class ScheduleActivity extends Activity {
+    private EditText title, description;
     private LinearLayout activityContainer;
-    private Button addActivityBtn;
     private Button saveButton;
+    private ImageButton addActivityBtn;
+    private TextView dateText;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,29 +42,23 @@ public class ScheduleActivity extends Activity{
         title = findViewById(R.id.txt_title);
         description = findViewById(R.id.txt_description);
         activityContainer = findViewById(R.id.activity_container);
+        addActivityBtn = findViewById(R.id.add_activity_btn);
+        saveButton = findViewById(R.id.save_btn);
+        dateText = findViewById(R.id.schedule_date_txt);
+        calendar = Calendar.getInstance();
 
-        findViewById(R.id.save_btn).setOnClickListener(v -> onSaveClick());
-        findViewById(R.id.add_activity_btn).setOnClickListener(v -> onAddActivityClick());
+        addActivityBtn.setOnClickListener(v -> onAddActivityClick());
+        saveButton.setOnClickListener(v -> saveBtnClick());
+        findViewById(R.id.schedule_date).setOnClickListener(v -> showDatePicker());
     }
 
-    public void onSaveClick()
-    {
-        String titleText = title.getText().toString().trim();
-        String desText = description.getText().toString().trim();
-
-        if(titleText.isEmpty() || desText.isEmpty())
-            new LoginActivity().warningPopup(this,"title and description can not be empty!");
-        else
-        {
-            //save schedule
-        }
-    }
-
-    public void onAddActivityClick()
-    {
+    public void onAddActivityClick() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View cardView = inflater.inflate(R.layout.activity_card,activityContainer,false);
-        activityContainer.addView(cardView,activityContainer.getChildCount()-1);
+        View cardView = inflater.inflate(R.layout.activity_card, activityContainer, false);
+
+        View deleteBtn = cardView.findViewById(R.id.remove_card);
+        deleteBtn.setOnClickListener(v -> activityContainer.removeView(cardView));
+
+        activityContainer.addView(cardView, activityContainer.getChildCount() - 1);
     }
 }
-

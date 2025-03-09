@@ -38,7 +38,7 @@
 
         <activity android:name=".schedule.ScheduleActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
-            android:exported="false"/>
+            android:exported="true"/>
 
         <activity android:name=".login_register.LoginActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
