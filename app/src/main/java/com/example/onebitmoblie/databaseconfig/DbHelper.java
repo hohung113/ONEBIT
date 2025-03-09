@@ -168,6 +168,29 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public long insertData(String tableName, String[] columns, String[] values) {
+    if (columns.length != values.length) {
+        throw new IllegalArgumentException("Số lượng cột và giá trị phải bằng nhau.");
+    }
+
+    SQLiteDatabase db = this.getWritableDatabase();
+    ContentValues contentValues = new ContentValues();
+
+    for (int i = 0; i < columns.length; i++) {
+        contentValues.put(columns[i], values[i]);
+    }
+
+    long result = -1;
+    try {
+        result = db.insert(tableName, null, contentValues);
+    } catch (SQLiteException e) {
+        Log.e("DbHelper", "Lỗi khi chèn dữ liệu: " + e.getMessage());
+    } finally {
+        db.close();
+    }
+
+    return result;
+}
 
 
     public boolean isEmailExists(String email) {

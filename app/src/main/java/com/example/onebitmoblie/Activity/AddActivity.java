@@ -82,7 +82,7 @@ public class AddActivity extends Activity {
                     priorityLabel.setTextColor(Color.RED);
                     break;
                 case "Important":
-                    priorityLabel.setTextColor(Color.parseColor("#FFA500")); // Orange
+                    priorityLabel.setTextColor(Color.parseColor("#FFA500"));
                     break;
                 case "Normal":
                     priorityLabel.setTextColor(Color.CYAN);
@@ -124,20 +124,35 @@ public class AddActivity extends Activity {
             return;
         }
 
+        int priorityValue;
+        switch (selectedPriority) {
+            case "Low":
+                priorityValue = 0;
+                break;
+            case "Normal":
+                priorityValue = 1;
+                break;
+            case "High":
+                priorityValue = 2;
+                break;
+            default:
+                priorityValue = 1; // Giá trị mặc định
+        }
+
         try {
             DbHelper dbHelper = new DbHelper(this, null);
-
-            long activityId = dbHelper.insertDataHandler(
-                    "Activities",
-                    new String[]{"title", "priority", "imageURL"},
-                    new String[]{title, selectedPriority, "image_placeholder"}
+            long activityId = dbHelper.insertData(
+                "Activities",
+                new String[]{"title", "piority", "imageUrl", "type", "isDeleted"},
+                new String[]{title, String.valueOf(priorityValue), "image_placeholder", "0", "0"}
             );
 
+
             if (activityId != -1) {
-                dbHelper.insertDataHandler(
+                dbHelper.insertData(
                         "ActivityTrackLogs",
-                        new String[]{"activityID", "startTime", "endTime"},
-                        new String[]{String.valueOf(activityId), start, end}
+                        new String[]{"schedulingId", "activityID", "startTime", "endTime", "status", "isDeleted"},
+                        new String[]{"1", String.valueOf(activityId), start, end, "0", "0"}
                 );
 
                 Toast.makeText(this, "Activity saved successfully!", Toast.LENGTH_SHORT).show();
