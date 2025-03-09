@@ -8,13 +8,13 @@ import java.util.UUID;
 
 public class Users extends BaseEntity {
 //    private String id;
-    private String userName;
-    private String fullName;
-    private String passwordHash;
-    private int age;
-    private String email;
-    private String currentJob;
-    private Role role;
+    public String userName;
+    public String fullName;
+    public String passwordHash;
+    public int age;
+    public String email;
+    public String currentJob;
+    public Role role;
 //    private boolean isDeleted;
 //    private String createdAt;
 //    private String modifiedAt;
