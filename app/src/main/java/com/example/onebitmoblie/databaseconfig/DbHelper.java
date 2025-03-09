@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.onebitmoblie.Data.DatabaseEntities.NotificationLines;
 import com.example.onebitmoblie.Data.DatabaseEntities.Notifications;
 import com.example.onebitmoblie.Data.DatabaseEntities.Scheduling;
 import com.example.onebitmoblie.Data.DatabaseEntities.Statistics;
@@ -362,6 +363,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void syncDataToFirebase() {
         List<TableInfo> tables = new ArrayList<>();
+        tables.add(new TableInfo("NotificationLines", new String[]{"id","notificationId","schedulingId","toUserId","isRead","isDeleted","createdAt","modifiedAt","modifiedBy"}));
         tables.add(new TableInfo("Scheduling", new String[]{"id","title","userId","fromDate","toDate","description","status","isDeleted","createdAt","modifiedAt","modifiedBy"}));
         tables.add(new TableInfo("Notifications", new String[]{"id","title","content","type","isDeleted","createdAt","modifiedAt","modifiedBy"}));
         tables.add(new TableInfo("Users", new String[]{"id","userName", "fullName", "passwordHash", "age","email","currentJob","role","isDeleted","createdAt","modifiedAt","modifiedBy"}));
@@ -436,6 +438,21 @@ public class DbHelper extends SQLiteOpenHelper {
                                         s0,s7,s8,s9,s10,s1,s2, s3,s4,s5,s6
                                 );
                                 databaseReference.child("scheduling").child(values[0]).setValue(scheduling);
+                                break;
+                            case "NotificationLines":
+                                String nl0 = values[0]; // id
+                                String nl1 = values[1]; // notificationId
+                                String nl2 = values[2]; // schedulingId
+                                String nl3 = values[3]; // toUserId
+                                boolean nl4 = Boolean.parseBoolean(values[4]); // isRead
+                                boolean nl5 = Boolean.parseBoolean(values[5]); // isDeleted
+                                String nl6 = values[6]; // createAt
+                                String nl7 = values[7]; // modifiedAt
+                                String nl8 = values[8]; // modifiedBy
+
+                                NotificationLines notificationLines =  new NotificationLines(
+                                        nl0,nl5,nl6,nl7,nl8,nl1,nl2, nl3,nl4);
+                                databaseReference.child("notificationLines").child(values[0]).setValue(notificationLines);
                                 break;
                             case "Statistics":
                                 Statistics statistics = new Statistics(values[0],Boolean.parseBoolean(values[5]), values[6], values[7], (values[8]), values[1], values[2], values[3],values[4] );
