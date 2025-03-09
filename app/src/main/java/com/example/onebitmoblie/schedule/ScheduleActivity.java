@@ -1,3 +1,5 @@
+package com.example.onebitmoblie.schedule;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -60,5 +62,43 @@ public class ScheduleActivity extends Activity {
         deleteBtn.setOnClickListener(v -> activityContainer.removeView(cardView));
 
         activityContainer.addView(cardView, activityContainer.getChildCount() - 1);
+    }
+    private void saveBtnClick() {
+        String scheduleID = UUID.randomUUID().toString();
+        String today = Calendar.getInstance().toString();
+        String userID = new SessionManager(this).getKeyId();
+
+        String fromDate = calendar.toString();
+        String toDate = calendar.toString();
+        String titleTxt = title.getText().toString();
+        String descriptionTxt = description.getText().toString();
+
+        //validation
+        if (titleTxt.isEmpty() || descriptionTxt.isEmpty()) {
+            PopupHelper.shopPopup(this, "Please don't let title or description empty!"
+                    , Color.RED, Color.WHITE);
+            return;
+        }
+    }
+    private void showDatePicker()
+    {
+        Calendar today = Calendar.getInstance();
+
+        // Create a DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> {
+                    calendar.set(year, month, dayOfMonth);
+                    //updateDateText();
+                },
+                today.get(Calendar.YEAR),
+                today.get(Calendar.MONTH),
+                today.get(Calendar.DAY_OF_MONTH)
+        );
+
+        // Restrict selection to today or later
+        datePickerDialog.getDatePicker().setMinDate(today.getTimeInMillis());
+
+        datePickerDialog.show();
     }
 }
