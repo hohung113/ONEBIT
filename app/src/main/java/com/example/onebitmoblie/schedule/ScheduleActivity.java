@@ -101,4 +101,8 @@ public class ScheduleActivity extends Activity {
 
         datePickerDialog.show();
     }
+    public void goBack(android.view.View view){
+        onBackPressed();
+    }
+
 }
