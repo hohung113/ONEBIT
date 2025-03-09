@@ -48,17 +48,6 @@ public class RegisterActivity extends Activity {
         Button btnRegister = findViewById(R.id.btn_register);
         TextView tvLoginRedirect = findViewById(R.id.tv_login_redirect);
 
-//        try {
-//            DBHelper = new DbHelper(this, null);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        if (DBHelper != null) {
-//            DBHelper.syncDataToFirebase();
-//        } else {
-//            Log.e("DB_ERROR", "DbHelper is null");
-//        }
-
         tvLoginRedirect.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
