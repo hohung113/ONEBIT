@@ -15,6 +15,11 @@ public class NotificationLines extends BaseEntity {
         this.toUserId = toUserId;
         this.isRead = isRead;
     }
+    public NotificationLines(){
+        super();
+
+    }
+
 
     public String getNotificationId() {
         return notificationId;

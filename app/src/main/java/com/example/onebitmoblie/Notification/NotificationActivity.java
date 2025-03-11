@@ -26,12 +26,17 @@ import com.example.onebitmoblie.Data.DatabaseEntities.Notifications;
 import com.example.onebitmoblie.Data.NotificationType;
 import com.example.onebitmoblie.Data.ViewModels.NotificationVM;
 import com.example.onebitmoblie.R;
+import com.example.onebitmoblie.common.SessionManager;
 import com.example.onebitmoblie.homepage.HomeActivity;
 import com.example.onebitmoblie.profile.ProfileActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class NotificationActivity extends AppCompatActivity {
 
@@ -41,6 +46,7 @@ public class NotificationActivity extends AppCompatActivity {
     Button btnHome, btnTracking ,btnProfile ;
     private NotificationDAO notificationDAO;
     private NotificationLineDAO notificationLineDAO;
+    private NotificationLineDAO.FirebaseCallback<List<NotificationLines>> callbackRef;
 
 
     @Override
@@ -49,12 +55,8 @@ public class NotificationActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_notification);
         //setup DB
-        try {
-            notificationDAO = new NotificationDAO(this);
-            notificationLineDAO = new NotificationLineDAO(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        notificationLineDAO = new NotificationLineDAO();
+        notificationDAO = new NotificationDAO();
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -70,59 +72,68 @@ public class NotificationActivity extends AppCompatActivity {
             toolbar.getNavigationIcon().setTint(whiteColor);
         }
         //setup data of notifications
-//        long notiId1 = notificationDAO.insertNotification(new Notifications(
-//                "a1b2c3d4e5f67890abcdef1234567890",  // ID mới
-//                false,
-//                "2024-03-01 10:30:00",
-//                "2024-03-01 12:00:00",
-//                "admin",
-//                "System Update",
-//                "The system will undergo maintenance at midnight.",
-//                NotificationType.SYSTEM
-//        ));
-//        long notiId2 = notificationDAO.insertNotification(new Notifications(
-//                "9f8e7d6c5b4a3210abcdef0123456789",  // ID mới
-//                false,  // Đã bị xóa (isDeleted = true)
-//                "2024-03-03 14:45:00",
-//                "2024-03-03 15:10:00",
-//                "teacher",
-//                "New Assignment Posted",
-//                "A new assignment has been uploaded for your course.",
-//                NotificationType.SCHEDULES
-//        ));
-        List<Notifications> notifications = notificationDAO.getAllNotifications();
-        for (Notifications notification: notifications) {
-            Log.d("NotificationCheck", "ID: " + notification.getId() + " | Content: " + notification.getContent());
-        }
-        ;
+
         //setup data of notificationLine
 
         //set list recycle view
         rcvNotification = findViewById(R.id.recyclerView);
         notificationVMS = new ArrayList<>();
-//        List<NotificationLines> notificationLines = notificationLineDAO.getByToUserId("bcf32912bfc1acd8c4245461554c4cf6");
-//        if(notificationLines!=null){
-//            for (NotificationLines notificationLine : notificationLines){
-//                Notifications notification = notificationDAO.getNotificationsById(notificationLine.getNotificationId());
-//                NotificationVM notificationVM = new NotificationVM();
-//                notificationVM.setNotificationId(notificationLine.getNotificationId());
-//                notificationVM.setSchedulingId(notificationLine.getSchedulingId());
-//                notificationVM.setTitle(notification.getTitle());
-//                notificationVM.setContent(notification.getContent());
-//                notificationVM.setNotificationType(notification.getType());
-//                notificationVM.setCreatedAt(notification.getCreatedAt());
-//                notificationVM.setModifiedAt(notification.getModifiedAt());
-//                notificationVM.setCreated(notificationLine.getIsRead());
-//                notificationVMS.add(notificationVM);
-//            }
-//
-//        }
+        List<NotificationLines> notificationLines = new ArrayList<>();
 
+        callbackRef = result -> {
+            notificationLines.clear();
+            notificationLines.addAll(result);
+            Log.d("CALLBACK", "Số phần tử nhận được: " + result.size());
 
-        notificationAdapter = new NotificationAdapter(notificationVMS);
+            if (!notificationLines.isEmpty()) {
+                AtomicInteger count = new AtomicInteger(0);  // Đếm số lần callback hoàn tất
+
+                for (NotificationLines notificationLine : notificationLines) {
+                    notificationDAO.getByNotificationId(notificationLine.getNotificationId(), notification -> {
+                        NotificationVM notificationVM = new NotificationVM();
+                        notificationVM.setNotificationLineId(notificationLine.getId());
+                        notificationVM.setNotificationId(notificationLine.getNotificationId());
+                        notificationVM.setSchedulingId(notificationLine.getSchedulingId());
+                        notificationVM.setCreated(notificationLine.getIsRead());
+                        Log.d("IsREAD", "check read: "+notificationLine.getIsRead());
+
+                        if (notification != null) {
+                            notificationVM.setTitle(notification.getTitle());
+                            notificationVM.setContent(notification.getContent());
+                            notificationVM.setNotificationType(notification.getType());
+                            notificationVM.setCreatedAt(notification.getCreatedAt());
+                            notificationVM.setModifiedAt(notification.getModifiedAt());
+                        } else {
+                            Log.d("NOTIF", "Không tìm thấy thông báo");
+                        }
+
+                        // Chỉ thêm vào danh sách sau khi dữ liệu đã được cập nhật
+                        notificationVMS.add(notificationVM);
+
+                        // Kiểm tra nếu đã xử lý xong tất cả phần tử
+                        if (count.incrementAndGet() == notificationLines.size()) {
+                            runOnUiThread(() -> {
+                                notificationAdapter.notifyDataSetChanged();
+                                Log.d("CALLBACK", "Cập nhật UI với " + notificationVMS.size() + " phần tử.");
+                            });
+                        }
+                    });
+                }
+            }
+        };
+        SessionManager session = new SessionManager(this);
+        String keyUser = session.getKeyId();
+// Gọi Firebase
+        //test userId ở đây, nào log dc firebase thì dán keyUser vào
+        notificationLineDAO.getByToUserId("bcf32912bfc1acd8c4245461554c4cf6",callbackRef);
+
+// Khởi tạo RecyclerView
+        notificationAdapter = new NotificationAdapter(notificationVMS, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rcvNotification.setLayoutManager(linearLayoutManager);
         rcvNotification.setAdapter(notificationAdapter);
+
+
 
         //navigation
         btnHome = findViewById(R.id.btnHome);

@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
+
+import com.example.onebitmoblie.Notification.NotificationActivity;
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.profile.ProfileActivity;
 import com.example.onebitmoblie.schedule.ScheduleActivity;
