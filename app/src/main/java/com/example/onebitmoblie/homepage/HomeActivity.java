@@ -11,7 +11,11 @@ import androidx.annotation.Nullable;
 import com.example.onebitmoblie.Notification.NotificationActivity;
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.profile.ProfileActivity;
+import com.example.onebitmoblie.schedule.ScheduleActivity;
 import com.example.onebitmoblie.settings.SettingActivity;
+import com.example.onebitmoblie.Notification.NotificationActivity ;
+
+import org.jetbrains.annotations.Async;
 
 public class HomeActivity extends Activity {
     Button btnHome, btnTracking, btnNotification ,btnProfile ;
@@ -29,8 +33,8 @@ public class HomeActivity extends Activity {
         btnFAQ = findViewById(R.id.btnFAQ);
 //        btnHome.setOnClickListener(view -> startActivity(new Intent(this, HomeActivity.class)));
         btnProfile.setOnClickListener(view -> startActivity(new Intent(this, ProfileActivity.class)));
-btnNotification.setOnClickListener(view -> startActivity(new Intent(this, NotificationActivity.class)));
-        //btnFAQ.setOnClickListener(view -> startActivity(new Intent(this, ScheduleActivity.class)));
+        btnNotification.setOnClickListener(view -> startActivity(new Intent(this, NotificationActivity.class)));
+        btnFAQ.setOnClickListener(view -> startActivity(new Intent(this, ScheduleActivity.class)));
     }
 
     public void openSettings(android.view.View view){

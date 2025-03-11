@@ -3,10 +3,10 @@ import com.example.onebitmoblie.Data.BaseEntity;
 import java.util.UUID;
 
 public class NotificationLines extends BaseEntity {
-    private String notificationId;
-    private String schedulingId;
-    private String toUserId;
-    private Boolean isRead;
+    public String notificationId;
+    public String schedulingId;
+    public String toUserId;
+    public Boolean isRead;
 
     public NotificationLines(String id, boolean isDeleted, String createdAt, String modifiedAt, String modifiedBy, String notificationId, String schedulingId, String toUserId, Boolean isRead) {
         super(id, isDeleted, createdAt, modifiedAt, modifiedBy);

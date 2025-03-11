@@ -9,10 +9,15 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.onebitmoblie.Data.DatabaseEntities.NotificationLines;
+import com.example.onebitmoblie.Data.DatabaseEntities.Notifications;
+import com.example.onebitmoblie.Data.DatabaseEntities.Scheduling;
 import com.example.onebitmoblie.Data.DatabaseEntities.Statistics;
 import com.example.onebitmoblie.Data.DatabaseEntities.TableInfo;
 import com.example.onebitmoblie.Data.DatabaseEntities.Users;
+import com.example.onebitmoblie.Data.NotificationType;
 import com.example.onebitmoblie.Data.Role;
+import com.example.onebitmoblie.Data.SchedulingStatus;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +35,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class DbHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static String DATABASE_PATH = "";
     private static final String DATABASE_NAME = "onebit.db";
 
@@ -163,6 +169,29 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public long insertData(String tableName, String[] columns, String[] values) {
+    if (columns.length != values.length) {
+        throw new IllegalArgumentException("Số lượng cột và giá trị phải bằng nhau.");
+    }
+
+    SQLiteDatabase db = this.getWritableDatabase();
+    ContentValues contentValues = new ContentValues();
+
+    for (int i = 0; i < columns.length; i++) {
+        contentValues.put(columns[i], values[i]);
+    }
+
+    long result = -1;
+    try {
+        result = db.insert(tableName, null, contentValues);
+    } catch (SQLiteException e) {
+        Log.e("DbHelper", "Lỗi khi chèn dữ liệu: " + e.getMessage());
+    } finally {
+        db.close();
+    }
+
+    return result;
+}
 
 
     public boolean isEmailExists(String email) {
@@ -334,25 +363,18 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void syncDataToFirebase() {
         List<TableInfo> tables = new ArrayList<>();
+        tables.add(new TableInfo("NotificationLines", new String[]{"id","notificationId","schedulingId","toUserId","isRead","isDeleted","createdAt","modifiedAt","modifiedBy"}));
+        tables.add(new TableInfo("Scheduling", new String[]{"id","title","userId","fromDate","toDate","description","status","isDeleted","createdAt","modifiedAt","modifiedBy"}));
+        tables.add(new TableInfo("Notifications", new String[]{"id","title","content","type","isDeleted","createdAt","modifiedAt","modifiedBy"}));
         tables.add(new TableInfo("Users", new String[]{"id","userName", "fullName", "passwordHash", "age","email","currentJob","role","isDeleted","createdAt","modifiedAt","modifiedBy"}));
-//        tables.add(new TableInfo("WorkShift", new String[]{"ShiftID", "ShiftName", "StartTime", "EndTime"}));
-//        tables.add(new TableInfo("Employee", new String[]{"EmployeeID", "EmployeeName", "Phone", "Email"}));
-//        tables.add(new TableInfo("Account", new String[]{"AccountID", "Passwordd", "Email", "EmployeeID"}));
-//        tables.add(new TableInfo("LeaveType", new String[]{"LeaveTypeID", "LeaveTypeName"}));
-//        tables.add(new TableInfo("LeaveRequest", new String[]{"LeaveID", "CreatedTime", "Status", "LeaveTypeID", "EmployeeID", "LeaveStartTime", "LeaveEndTime", "Reason","CountShift"}));
-//        tables.add(new TableInfo("Attendance", new String[]{"AttendanceID", "CreatedTime", "AttendanceType", "EmployeeID", "ShiftID", "PlaceID", "Latitude", "Longitude"}));
-        tables.add(new TableInfo("Statistics", new String[]{"id", "userId", "startTimeToReport", "endTimeToReport","contentReport","isDeleted","createdAt","modifiedAt","modifiedBy"}));
-
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         SQLiteDatabase db = this.getReadableDatabase();
 
         for (TableInfo table : tables) {
             String query = "SELECT * FROM " + table.tableName;
             Cursor cursor = db.rawQuery(query, null);
-
             if (cursor.moveToFirst()) {
                 do {
-                    // Lấy dữ liệu từ Cursor
                     String[] values = new String[table.columnNames.length];
                     boolean validRow = true;
 
@@ -369,7 +391,6 @@ public class DbHelper extends SQLiteOpenHelper {
                     if (validRow) {
                         switch (table.tableName) {
                             case "Users":
-//                                Users users = new Users(values[0], values[1], values[2], values[3], Integer.parseInt(values[4]), values[5], values[6],Role.fromString(values[7]),Boolean.parseBoolean(values[8]),values[9],values[10],values[11]);
                                 Users users = new Users(
                                         values[0],  // id
                                         Boolean.parseBoolean(values[8]), // isDeleted
@@ -386,30 +407,53 @@ public class DbHelper extends SQLiteOpenHelper {
                                 );
                                 databaseReference.child("users").child(values[0]).setValue(users);
                                 break;
-//                            case "WorkShift":
-//                                WorkShift workShift = new WorkShift(values[0], values[1], values[2], values[3]);
-//                                databaseReference.child("workshifts").child(values[0]).setValue(workShift);
-//                                break;
-//                            case "Employee":
-//                                Employee employee = new Employee(values[0], values[1], values[2], values[3]);
-//                                databaseReference.child("employees").child(values[0]).setValue(employee);
-//                                break;
-//                            case "Account":
-//                                Account account = new Account(values[0], values[1], values[2], values[3]);
-//                                databaseReference.child("accounts").child(values[0]).setValue(account);
-//                                break;
-//                            case "LeaveType":
-//                                LeaveType leaveType = new LeaveType(values[0], values[1]);
-//                                databaseReference.child("leavetypes").child(values[0]).setValue(leaveType);
-//                                break;
-//                            case "LeaveRequest":
-//                                LeaveRequest leaveRequest = new LeaveRequest(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], Integer.parseInt(values[8]));
-//                                databaseReference.child("leaverequests").child(values[0]).setValue(leaveRequest);
-//                                break;
-//                            case "Attendance":
-//                                Attendance attendance = new Attendance(values[0], values[1], values[2], values[3], values[4], values[5], Double.parseDouble(values[6]), Double.parseDouble(values[7]));
-//                                databaseReference.child("attendances").child(values[0]).setValue(attendance);
-//                                break;
+                           case "Notifications":
+                               String n0 = values[0];
+                               String n1 = values[1];
+                               String n2 = values[2];
+                               NotificationType n3 = NotificationType.fromInt(Integer.parseInt(values[3]));
+                               boolean n4 = Boolean.parseBoolean(values[4]);
+                               String n5 = values[5];
+                               String n6 = values[6];
+                               String n7 = values[7];
+                               Notifications notifications =  new Notifications(
+                                    n0,n1,n2,n3,n4,n5,n6,n7
+                                );
+                                databaseReference.child("notifications").child(values[0]).setValue(notifications);
+                                break;
+                            case "Scheduling":
+                                String s0 = values[0];
+                                String s1 = values[1];
+                                String s2 = values[2];
+                                String s3 = values[3];
+                                String s4 = values[4];
+                                String s5 = values[5];
+                                SchedulingStatus s6 = SchedulingStatus.fromInt(Integer.parseInt(values[6]));
+                                boolean s7 = Boolean.parseBoolean(values[7]);
+                                String s8 = values[8];
+                                String s9 = values[9];
+                                String s10 = values[10];
+
+                                Scheduling scheduling =  new Scheduling(
+                                        s0,s7,s8,s9,s10,s1,s2, s3,s4,s5,s6
+                                );
+                                databaseReference.child("scheduling").child(values[0]).setValue(scheduling);
+                                break;
+                            case "NotificationLines":
+                                String nl0 = values[0]; // id
+                                String nl1 = values[1]; // notificationId
+                                String nl2 = values[2]; // schedulingId
+                                String nl3 = values[3]; // toUserId
+                                boolean nl4 = Boolean.parseBoolean(values[4]); // isRead
+                                boolean nl5 = Boolean.parseBoolean(values[5]); // isDeleted
+                                String nl6 = values[6]; // createAt
+                                String nl7 = values[7]; // modifiedAt
+                                String nl8 = values[8]; // modifiedBy
+
+                                NotificationLines notificationLines =  new NotificationLines(
+                                        nl0,nl5,nl6,nl7,nl8,nl1,nl2, nl3,nl4);
+                                databaseReference.child("notificationLines").child(values[0]).setValue(notificationLines);
+                                break;
                             case "Statistics":
                                 Statistics statistics = new Statistics(values[0],Boolean.parseBoolean(values[5]), values[6], values[7], (values[8]), values[1], values[2], values[3],values[4] );
                                 databaseReference.child("statistics").child(values[0]).setValue(statistics);

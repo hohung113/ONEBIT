@@ -39,7 +39,6 @@ public class LoginActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
         emailInput = findViewById(R.id.emailInput);
         passwordInput = findViewById(R.id.passwordInput);
         Button loginButton = findViewById(R.id.loginButton);
@@ -93,7 +92,8 @@ public class LoginActivity extends Activity {
     private void attemptLogin() {
         String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
-
+        // Auto Sync Data to firebase
+        //dbHelper.syncDataToFirebase();
         String emptyWarning = "";
 
         if (email.isEmpty() || password.isEmpty()) {
