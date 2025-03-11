@@ -47,7 +47,7 @@ public class NotificationActivity extends AppCompatActivity {
     private NotificationDAO notificationDAO;
     private NotificationLineDAO notificationLineDAO;
     private NotificationLineDAO.FirebaseCallback<List<NotificationLines>> callbackRef;
-
+    private SessionManager _sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class NotificationActivity extends AppCompatActivity {
         //setup DB
         notificationLineDAO = new NotificationLineDAO();
         notificationDAO = new NotificationDAO();
-
+        _sessionManager = new SessionManager(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -124,9 +124,10 @@ public class NotificationActivity extends AppCompatActivity {
         SessionManager session = new SessionManager(this);
         String keyUser = session.getKeyId();
 // Gọi Firebase
+        String userId = _sessionManager.getKeyId();
         //test userId ở đây, nào log dc firebase thì dán keyUser vào
-        notificationLineDAO.getByToUserId("bcf32912bfc1acd8c4245461554c4cf6",callbackRef);
-
+        //notificationLineDAO.getByToUserId("bcf32912bfc1acd8c4245461554c4cf6",callbackRef);
+        notificationLineDAO.getByToUserId(userId,callbackRef);
 // Khởi tạo RecyclerView
         notificationAdapter = new NotificationAdapter(notificationVMS, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
