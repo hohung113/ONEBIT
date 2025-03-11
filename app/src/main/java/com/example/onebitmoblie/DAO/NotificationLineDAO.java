@@ -1,89 +1,104 @@
 package com.example.onebitmoblie.DAO;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-
+import android.util.Log;
+import androidx.annotation.NonNull;
 import com.example.onebitmoblie.Data.DatabaseEntities.NotificationLines;
-import com.example.onebitmoblie.databaseconfig.DbHelper;
+import com.google.firebase.database.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationLineDAO {
-    private SQLiteDatabase db;
-    private DbHelper dbHelper;
+    private DatabaseReference dbRef;
 
-    public NotificationLineDAO(Context context) throws IOException {
-        dbHelper = new DbHelper(context, null);
-        db = dbHelper.getWritableDatabase();
+    public NotificationLineDAO() {
+        dbRef = FirebaseDatabase.getInstance().getReference("notificationLines");
     }
 
-    public long insertNotificationLine(NotificationLines notificationLine) {
-        ContentValues values = new ContentValues();
-        values.put("isDeleted", notificationLine.isDeleted() ? 1 : 0);
-        values.put("createdAt", notificationLine.getCreatedAt());
-        values.put("modifiedAt", notificationLine.getModifiedAt());
-        values.put("modifiedBy", notificationLine.getModifiedBy());
-        values.put("notificationId", notificationLine.getNotificationId());
-        values.put("schedulingId", notificationLine.getSchedulingId());
-        values.put("toUserId", notificationLine.getToUserId());
-        values.put("isRead", notificationLine.getIsRead() ? 1 : 0);  // Chuyển Boolean thành int
-
-        return db.insert("NotificationLines", null, values);
-    }
-
-    public int markAsRead(String id){
-        ContentValues values = new ContentValues();
-        values.put("isRead",1);
-        return db.update("NotificationLines", values, "id=?", new String[]{id});
-    }
-    public NotificationLines getByNotificationId(String notificationId) {
-        NotificationLines notificationLine = null;
-        Cursor cursor = db.query("NotificationLines", null, "notificationId = ? AND isDeleted = 0",
-                new String[]{notificationId}, null, null, "createdAt DESC", "1"); // Giới hạn 1 kết quả
-
-        if (cursor.moveToFirst()) {
-            notificationLine = new NotificationLines(
-                    cursor.getString(0),
-                    cursor.getInt(5) == 1,  // Chuyển int -> boolean
-                    cursor.getString(6),
-                    cursor.getString(7),
-                    cursor.getString(8),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3),
-                    cursor.getInt(4) == 1  // Chuyển int -> boolean
-            );
+    public void insertNotificationLine(NotificationLines notificationLine) {
+        String id = dbRef.push().getKey(); // Tạo ID tự động
+        if (id != null) {
+            notificationLine.setId(id);
+            dbRef.child(id).setValue(notificationLine)
+                    .addOnSuccessListener(aVoid -> Log.d("DB_SUCCESS", "Insert successful: " + id))
+                    .addOnFailureListener(e -> Log.e("DB_ERROR", "Insert failed", e));
         }
-        cursor.close();
-        return notificationLine;
     }
 
-    public List<NotificationLines> getByToUserId(String toUserId) {
-        List<NotificationLines> list = new ArrayList<>();
-        Cursor cursor = db.query("NotificationLines", null, "toUserId = ? AND isDeleted = 0",
-                new String[]{toUserId}, null, null, "createdAt DESC");
+    public void markAsRead(String id) {
+        dbRef.child(id).child("isRead").setValue(true)
+                .addOnSuccessListener(aVoid -> Log.d("DB_SUCCESS", "Marked as read: " + id))
+                .addOnFailureListener(e -> Log.e("DB_ERROR", "Update failed", e));
+    }
 
-        if (cursor.moveToFirst()) {
-            do {
-                NotificationLines notificationLine = new NotificationLines(
-                        cursor.getString(0),
-                        cursor.getInt(5) == 1,  // Chuyển int -> boolean
-                        cursor.getString(6),
-                        cursor.getString(7),
-                        cursor.getString(8),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getInt(4) == 1  // Chuyển int -> boolean
-                );
-                list.add(notificationLine);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return list;
+    public void getAllNotificationLines(FirebaseCallback<List<NotificationLines>> callback) {
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("FIREBASE", "onDataChange được gọi! Số lượng: " + snapshot.getChildrenCount());
+                List<NotificationLines> list = new ArrayList<>();
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    NotificationLines notificationLine = data.getValue(NotificationLines.class);
+                    if (notificationLine != null) {
+                        list.add(notificationLine);
+                    }
+                }
+                callback.onCallback(list);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("FIREBASE_ERROR", "Lỗi khi lấy dữ liệu: " + error.getMessage());
+            }
+        });
+    }
+
+
+    public void getByNotificationId(String notificationId, FirebaseCallback<NotificationLines> callback) {
+        dbRef.orderByChild("notificationId").equalTo(notificationId).limitToFirst(1)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot data : snapshot.getChildren()) {
+                            NotificationLines notificationLine = data.getValue(NotificationLines.class);
+                            if (notificationLine != null && !notificationLine.isDeleted()) {
+                                callback.onCallback(notificationLine);
+                                return;
+                            }
+                        }
+                        callback.onCallback(null);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("DB_ERROR", "Failed to fetch notification line", error.toException());
+                    }
+                });
+    }
+
+    public void getByToUserId(String toUserId, FirebaseCallback<List<NotificationLines>> callback) {
+        dbRef.orderByChild("toUserId").equalTo(toUserId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<NotificationLines> list = new ArrayList<>();
+                        for (DataSnapshot data : snapshot.getChildren()) {
+                            NotificationLines notificationLine = data.getValue(NotificationLines.class);
+                            if (notificationLine != null && !notificationLine.isDeleted()) {
+                                list.add(notificationLine);
+                            }
+                        }
+                        callback.onCallback(list);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("DB_ERROR", "Failed to fetch notification lines", error.toException());
+                    }
+                });
+    }
+
+    public interface FirebaseCallback<T> {
+        void onCallback(T result);
     }
 }

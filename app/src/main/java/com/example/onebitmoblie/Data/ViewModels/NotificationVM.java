@@ -5,6 +5,7 @@ import com.example.onebitmoblie.Data.NotificationType;
 import kotlin.text.UStringsKt;
 
 public class NotificationVM {
+    private String notificationLineId;
     private String notificationId;
     private String schedulingId;
     private String title;
@@ -90,5 +91,13 @@ public class NotificationVM {
 
     public void setSchedulingId(String schedulingId) {
         this.schedulingId = schedulingId;
+    }
+
+    public String getNotificationLineId() {
+        return notificationLineId;
+    }
+
+    public void setNotificationLineId(String notificationLineId) {
+        this.notificationLineId = notificationLineId;
     }
 }

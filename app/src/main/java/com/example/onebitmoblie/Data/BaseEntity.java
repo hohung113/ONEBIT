@@ -18,6 +18,10 @@ public class BaseEntity {
         this.modifiedBy = modifiedBy;
     }
 
+    public BaseEntity() {
+
+    }
+
     public String getId() {
         return id;
     }
