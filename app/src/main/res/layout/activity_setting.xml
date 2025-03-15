@@ -1,12 +1,11 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F8F8F8">
-<!--    tools:context=".SettingsActivity">-->
+    android:background="#F8F8F8"
+    android:orientation="vertical">
+    <!--    tools:context=".SettingsActivity">-->
 
     <!-- Top App Bar -->
     <androidx.appcompat.widget.Toolbar
@@ -18,24 +17,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_back"
-                app:tint="#FFFFFF"
                 android:layout_marginStart="16dp"
-                android:onClick="goBack"/>
+                android:onClick="goBack"
+                android:src="@drawable/ic_back"
+                app:tint="#FFFFFF" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:text="Setting"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:layout_marginStart="16dp" />
+                android:textSize="18sp" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
@@ -49,18 +48,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
 
             <!-- Setting Items -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded_edittext"
-                android:padding="10dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="20dp">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <ImageView
                     android:layout_width="36dp"
@@ -73,10 +72,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:onClick="comeProfile"
                     android:text="Account"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:onClick="comeProfile"/>
+                    android:textSize="20sp"/>
 
                 <ImageView
                     android:layout_width="36dp"
@@ -88,26 +87,28 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded_edittext"
-                android:padding="10dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="20dp">
+                android:orientation="horizontal"
+                android:padding="10dp"
+                >
 
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
                     android:src="@drawable/baseline_logout_24"
-                    app:tint="#4285F4"
-                    android:layout_marginEnd="12dp" />
+                    app:tint="#4285F4" />
 
                 <TextView
+                    android:id="@+id/logoutTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Logout"
                     android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"/>
 
                 <ImageView
                     android:layout_width="36dp"
@@ -119,20 +120,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded_edittext"
-                android:padding="10dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="20dp">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
                     android:src="@drawable/baseline_delete_forever_24"
-                    app:tint="#4285F4"
-                    android:layout_marginEnd="12dp" />
+                    app:tint="#4285F4" />
 
                 <TextView
+                    android:id="@+id/deleteAccountTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -150,20 +152,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded_edittext"
-                android:padding="10dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="20dp">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
                     android:src="@drawable/baseline_error_24"
-                    app:tint="#4285F4"
-                    android:layout_marginEnd="12dp" />
+                    app:tint="#4285F4" />
 
                 <TextView
+                    android:id="@+id/reportBugTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -181,18 +184,18 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded_edittext"
-                android:padding="10dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="20dp">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
                     android:src="@drawable/baseline_email_24"
-                    app:tint="#4285F4"
-                    android:layout_marginEnd="12dp" />
+                    app:tint="#4285F4" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -212,17 +215,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:background="@drawable/rounded_edittext"
-                android:padding="10dp"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
                     android:src="@drawable/baseline_auto_stories_24"
-                    app:tint="#4285F4"
-                    android:layout_marginEnd="12dp" />
+                    app:tint="#4285F4" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -230,7 +233,8 @@
                     android:layout_weight="1"
                     android:text="About"
                     android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:onClick="openAbout"/>
 
                 <ImageView
                     android:layout_width="36dp"

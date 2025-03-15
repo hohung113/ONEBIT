@@ -25,9 +25,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <activity android:name=".homepage.HomeActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="ONEBITMOBILE"
             android:theme="@style/Theme.ONEBITMOBLIE">
         </activity>
@@ -47,10 +47,15 @@
         <activity android:name=".settings.SettingActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="false"/>
+
+        <activity android:name=".settings.AboutActivity"
+            android:theme="@style/Theme.ONEBITMOBLIE"
+            android:exported="true" />
+
         <activity
             android:name=".Notification.NotificationActivity"
             android:theme="@style/NotificationTheme"
-            android:exported="false" />
+            android:exported="true" />
     </application>
 
 </manifest>
