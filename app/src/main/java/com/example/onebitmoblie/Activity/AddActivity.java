@@ -18,9 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.onebitmoblie.R;
-import com.example.onebitmoblie.databaseconfig.DbHelper;
+import com.example.onebitmoblie.common.PopupHelper;
+import com.example.onebitmoblie.common.SessionManager;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class AddActivity extends Activity {
 
@@ -124,55 +130,48 @@ public class AddActivity extends Activity {
             return;
         }
 
-        int priorityValue;
-        switch (selectedPriority) {
-            case "Low":
-                priorityValue = 0;
-                break;
-            case "Normal":
-                priorityValue = 1;
-                break;
-            case "High":
-                priorityValue = 2;
-                break;
-            default:
-                priorityValue = 1; // Giá trị mặc định
-        }
-
-        try {
-            DbHelper dbHelper = new DbHelper(this, null);
-            long activityId = dbHelper.insertData(
-                "Activities",
-                new String[]{"title", "piority", "imageUrl", "type", "isDeleted"},
-                new String[]{title, String.valueOf(priorityValue), "image_placeholder", "0", "0"}
-            );
-
-
-            if (activityId != -1) {
-                dbHelper.insertData(
-                        "ActivityTrackLogs",
-                        new String[]{"schedulingId", "activityID", "startTime", "endTime", "status", "isDeleted"},
-                        new String[]{"1", String.valueOf(activityId), start, end, "0", "0"}
-                );
-
-                Toast.makeText(this, "Activity saved successfully!", Toast.LENGTH_SHORT).show();
-            } else {
-                showAlert("Error saving activity.");
-            }
-
-            // Reset fields
-            titleInput.setText("");
-            priorityLabel.setText("Select priority level");
-            priorityLabel.setTextColor(Color.GRAY);
-            selectedPriority = null;
-            startTime.setText("Select Start Time");
-            endTime.setText("Select End Time");
-
-        } catch (Exception e) {
-            Toast.makeText(this, "Error saving data: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        saveActivityToFirebase(title, start, end, selectedPriority);
     }
 
+    private void saveActivityToFirebase(String title, String start, String end, String priority) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("activities");
+        String activityId = UUID.randomUUID().toString();
+
+        String userId = new SessionManager(this).getKeyId();
+
+        String imageUrl = (attachmentPreview.getDrawable() != null) ? "URL của hình ảnh tải lên" : "";
+
+        Map<String, Object> activityData = new HashMap<>();
+        activityData.put("id", activityId);
+        activityData.put("userId", userId);
+        activityData.put("title", title);
+        activityData.put("priority", priority);
+        activityData.put("startTime", start);
+        activityData.put("endTime", end);
+        activityData.put("isDeleted", false);
+        activityData.put("createdAt", System.currentTimeMillis());
+        activityData.put("imageUrl", imageUrl);
+        activityData.put("modifiedAt", System.currentTimeMillis());
+        activityData.put("modifiedBy", userId);
+
+        dbRef.child(activityId).setValue(activityData)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Activity saved successfully!", Toast.LENGTH_SHORT).show();
+                    resetFields();
+                })
+                .addOnFailureListener(e -> {
+                    PopupHelper.shopPopup(this, "Save activity failed\nError: " + e.getMessage(), Color.WHITE, Color.RED);
+                });
+    }
+
+    private void resetFields() {
+        titleInput.setText("");
+        priorityLabel.setText("Select priority level");
+        priorityLabel.setTextColor(Color.GRAY);
+        selectedPriority = null;
+        startTime.setText("Select Start Time");
+        endTime.setText("Select End Time");
+    }
 
     private boolean isEndTimeValid(String start, String end) {
         try {
@@ -195,7 +194,6 @@ public class AddActivity extends Activity {
 
         return true;
     }
-
 
     private void onTimeSelect(TextView timeField) {
         Calendar calendar = Calendar.getInstance();
