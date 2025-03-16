@@ -73,9 +73,8 @@
                 android:textColor="@color/secontextcolor"
                 android:textSize="16sp" />
         </LinearLayout>
-
-
             <ImageButton
+                android:id="@+id/remove_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/remove_activity"

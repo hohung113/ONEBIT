@@ -30,7 +30,8 @@
                 android:background="@color/mainbackgroundcolor"
                 android:contentDescription="@string/back"
                 android:minHeight="48dp"
-                android:src="@drawable/back" />
+                android:src="@drawable/back"
+                android:onClick="goBack"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -93,6 +94,7 @@
             android:textStyle="bold" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/schedule_date"
             android:layout_width="121dp"
             android:layout_height="31dp"
             app:cardBackgroundColor="@color/secondbackgroundcolor"
@@ -101,6 +103,7 @@
             app:contentPaddingTop="4dp">
 
             <TextView
+                android:id="@+id/schedule_date_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/date_format"
@@ -113,7 +116,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="106dp"
+        android:layout_height="126dp"
         android:layout_margin="10dp"
         android:orientation="vertical">
 
@@ -150,9 +153,12 @@
             android:autofillHints="@null"
             android:background="@android:color/transparent"
             android:hint="@string/description"
-            android:inputType="text"
+            android:inputType="textMultiLine"
+            android:scrollbars="vertical"
             android:minHeight="48dp"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+            android:overScrollMode="never"
+            tools:ignore="DuplicateSpeakableTextCheck"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -170,17 +176,25 @@
             android:textStyle="bold" />
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/activity_container"
-        >
-            <ImageButton
-                android:id="@+id/add_activity_btn"
-                android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:contentDescription="@string/add_activity"
-                android:minHeight="48dp"
-                android:src="@drawable/ic_add" />
+                android:orientation="vertical"
+                android:id="@+id/activity_container">
+
+                <ImageButton
+                    android:id="@+id/add_activity_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:contentDescription="@string/add_activity"
+                    android:minHeight="48dp"
+                    android:minWidth="48dp"
+                    android:src="@drawable/ic_add"
+                    android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
         </ScrollView>
 
     </LinearLayout>

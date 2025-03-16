@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="1dp"
+    app:cardCornerRadius="6dp"
+    app:cardUseCompatPadding="true"
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contrNOtification"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:padding="7dp"
+
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/imgIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/edit"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toStartOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Tiêu đề thông báo -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Tiêu đề thông báo"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvTime"
+            app:layout_constraintStart_toEndOf="@id/imgIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Thời gian thông báo -->
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="15:30"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvTitle"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Mô tả ngắn của thông báo -->
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:text="Mô tả ngắn gọn về sự kiện hoặc hoạt động."
+            android:textColor="@color/gray"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgIcon"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
