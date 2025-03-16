@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,7 +14,6 @@
 		android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ONEBITMOBLIE"
         tools:targetApi="31">
         <!-- Register Activity -->
         <activity
@@ -25,8 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity android:name=".homepage.HomeActivity"
+        <activity
+            android:name=".login_register.LoginActivity"
             android:exported="false"
             android:label="ONEBITMOBILE"
             android:theme="@style/Theme.ONEBITMOBLIE">
@@ -40,10 +40,6 @@
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="true"/>
 
-        <activity android:name=".login_register.LoginActivity"
-            android:theme="@style/Theme.ONEBITMOBLIE"
-            android:exported="false"/>
-
         <activity android:name=".settings.SettingActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="false"/>
@@ -51,6 +47,11 @@
             android:name=".Notification.NotificationActivity"
             android:theme="@style/NotificationTheme"
             android:exported="false" />
+
+        <activity android:name=".homepage.HomeActivity"
+            android:theme="@style/Theme.ONEBITMOBLIE"
+            android:exported="true" />
+
     </application>
 
 </manifest>

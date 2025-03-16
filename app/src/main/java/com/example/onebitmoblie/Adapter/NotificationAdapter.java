@@ -1,5 +1,6 @@
 package com.example.onebitmoblie.Adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,10 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.onebitmoblie.DAO.NotificationLineDAO;
 import com.example.onebitmoblie.Data.ViewModels.NotificationVM;
 import com.example.onebitmoblie.R;
 
@@ -19,12 +22,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>{
     private List<NotificationVM> notificationVMS;
+    private Context context;
+    private NotificationLineDAO notificationLineDAO;
 
-    public NotificationAdapter(List<NotificationVM> notificationVMS) {
+    public NotificationAdapter(List<NotificationVM> notificationVMS, Context context) {
         this.notificationVMS = notificationVMS;
+        this.context = context;
+        notificationLineDAO = new NotificationLineDAO();
     }
 
     @NonNull
@@ -45,6 +53,7 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
             des = des.substring(0,50)+"...";
         }
         holder.tvDescription.setText(des);
+        //isCreated alf isRead
         if(notificationVM.isCreated()){
             holder.contrNOtification.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
         } else{
@@ -56,32 +65,19 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
         }
 
         // Lấy chuỗi createdAt
-        String createdAt = notificationVM.getCreatedAt(); // Ví dụ: "2024-12-31 14:30:00"
+        formatTime(notificationVM.getCreatedAt(), holder.tvTime);
 
-        // Định dạng ngày giờ phù hợp với chuỗi
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-        try {
-            Date createdDate = sdf.parse(createdAt); // Chuyển từ String sang Date
-            long diff = System.currentTimeMillis() - createdDate.getTime();
 
-            long seconds = diff / 1000;
-            long minutes = seconds / 60;
-            long hours = minutes / 60;
-            long days = hours / 24;
 
-            if (days > 0) {
-                holder.tvTime.setText(days + " day ago");
-            } else if (hours > 0) {
-                holder.tvTime.setText(hours + " hour ago");
-            } else if (minutes > 0) {
-                holder.tvTime.setText(minutes + " min ago");
-            } else {
-                holder.tvTime.setText("now");
+        holder.itemView.setOnClickListener(view -> {
+            showNotificationDialog(notificationVM);
+
+            if(!notificationVM.isCreated()){
+                notificationLineDAO.markAsRead(notificationVM.getNotificationLineId());
+                notificationVM.setCreated(true);
+                notifyItemChanged(position);
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-            holder.tvTime.setText("not given");
-        }
+        });
     }
 
     @Override
@@ -104,6 +100,39 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
             tvTime = itemView.findViewById(R.id.tvTime);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             contrNOtification = itemView.findViewById(R.id.contrNOtification);
+        }
+    }
+    private void showNotificationDialog(NotificationVM notification) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(notification.getTitle());
+        builder.setMessage("Thời gian: " + notification.getCreatedAt() + "\n\n" +"Type: "+notification.getNotificationType() + "\n\n" + notification.getContent());
+        builder.show();
+    }
+
+    public void formatTime(String createdAt, TextView textView) {
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+        isoFormat.setTimeZone(TimeZone.getTimeZone("UTC")); // Định dạng thời gian từ UTC
+
+        try {
+            Date createdDate = isoFormat.parse(createdAt);
+            long diff = System.currentTimeMillis() - createdDate.getTime();
+
+            long minutes = diff / (60 * 1000);
+            long hours = minutes / 60;
+            long days = hours / 24;
+
+            if (days > 0) {
+                textView.setText(days + "d ago");
+            } else if (hours > 0) {
+                textView.setText(hours + "h ago");
+            } else if (minutes > 0) {
+                textView.setText(minutes + "m ago");
+            } else {
+                textView.setText("Now");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            textView.setText("N/A");
         }
     }
 }
