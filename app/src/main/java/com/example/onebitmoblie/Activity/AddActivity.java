@@ -20,6 +20,7 @@ import android.util.Log;
 
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.common.PopupHelper;
+import com.example.onebitmoblie.schedule.ActivityDTOs;
 import com.example.onebitmoblie.common.SessionManager;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -44,6 +45,8 @@ public class AddActivity extends Activity {
     private ImageView attachmentPreview;
 
     private String imageUriString = "";
+
+    private static final int ADD_ACTIVITY_REQUEST_CODE = 1001;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private String selectedPriority = null;
@@ -133,6 +136,23 @@ public class AddActivity extends Activity {
             return;
         }
 
+        UUID scheduleID = (UUID) getIntent().getSerializableExtra("schedule_id"); 
+
+        if (scheduleID == null) {
+            showAlert("Schedule ID is required.");
+            return;
+        }
+
+        UUID activityID = UUID.randomUUID();
+        ActivityDTOs activityDTO = new ActivityDTOs(scheduleID, activityID, title, start, end);
+
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("activity_data", activityDTO);
+        setResult(RESULT_OK, resultIntent);
+
+        Toast.makeText(this, "Activity saved successfully!", Toast.LENGTH_SHORT).show();
+        finish();
+
         saveActivityToFirebase(title, start, end, selectedPriority);
     }
 
@@ -221,13 +241,27 @@ public class AddActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
-            attachmentPreview.setImageURI(imageUri);
-            imageUriString = imageUri.toString();
-        } else {
-            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+        if (requestCode == ADD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                ActivityDTOs activityDTO = data.getParcelableExtra("activity_data");
+                if (activityDTO != null) {
+                    Log.d("ActivityResult", "Received activity: " + activityDTO.getTitle());
+                    handleReceivedActivity(activityDTO);
+                } else {
+                    Log.e("ActivityResult", "ActivityDTOs is null, key may be incorrect.");
+                }
+            } else {
+                Log.e("ActivityResult", "Intent data is null.");
+            }
         }
+    }
+
+    private void handleReceivedActivity(ActivityDTOs activityDTO) {
+    if (activityDTO != null) {
+        Log.d("ActivityHandler", "Received Activity: " + activityDTO.getTitle());
+    } else {
+        Log.e("ActivityHandler", "Received null activity");
+    }
     }
 
     private void showAlert(String message) {
