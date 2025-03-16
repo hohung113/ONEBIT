@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.common.PopupHelper;
@@ -41,6 +42,8 @@ public class AddActivity extends Activity {
     private TextView endTime;
     private Button saveButton;
     private ImageView attachmentPreview;
+
+    private String imageUriString = "";
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private String selectedPriority = null;
@@ -139,8 +142,6 @@ public class AddActivity extends Activity {
 
         String userId = new SessionManager(this).getKeyId();
 
-        String imageUrl = (attachmentPreview.getDrawable() != null) ? "URL của hình ảnh tải lên" : "";
-
         Map<String, Object> activityData = new HashMap<>();
         activityData.put("id", activityId);
         activityData.put("userId", userId);
@@ -150,7 +151,7 @@ public class AddActivity extends Activity {
         activityData.put("endTime", end);
         activityData.put("isDeleted", false);
         activityData.put("createdAt", System.currentTimeMillis());
-        activityData.put("imageUrl", imageUrl);
+        activityData.put("imageUrl", imageUriString);
         activityData.put("modifiedAt", System.currentTimeMillis());
         activityData.put("modifiedBy", userId);
 
@@ -158,9 +159,11 @@ public class AddActivity extends Activity {
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Activity saved successfully!", Toast.LENGTH_SHORT).show();
                     resetFields();
+                    Log.d("FirebaseDebug", "Data saved: " + activityData.toString());
                 })
                 .addOnFailureListener(e -> {
                     PopupHelper.shopPopup(this, "Save activity failed\nError: " + e.getMessage(), Color.WHITE, Color.RED);
+                    Log.e("FirebaseDebug", "Error saving data: " + e.getMessage());
                 });
     }
 
@@ -221,6 +224,7 @@ public class AddActivity extends Activity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
             attachmentPreview.setImageURI(imageUri);
+            imageUriString = imageUri.toString();
         } else {
             Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
         }
