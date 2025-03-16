@@ -16,11 +16,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import com.example.onebitmoblie.R;
-import com.example.onebitmoblie.databaseconfig.DbHelper;
+import com.example.onebitmoblie.common.PopupHelper;
+import com.example.onebitmoblie.schedule.ActivityDTOs;
+import com.example.onebitmoblie.common.SessionManager;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class AddActivity extends Activity {
 
@@ -35,6 +43,10 @@ public class AddActivity extends Activity {
     private TextView endTime;
     private Button saveButton;
     private ImageView attachmentPreview;
+
+    private String imageUriString = "";
+
+    private static final int ADD_ACTIVITY_REQUEST_CODE = 1001;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private String selectedPriority = null;
@@ -124,55 +136,65 @@ public class AddActivity extends Activity {
             return;
         }
 
-        int priorityValue;
-        switch (selectedPriority) {
-            case "Low":
-                priorityValue = 0;
-                break;
-            case "Normal":
-                priorityValue = 1;
-                break;
-            case "High":
-                priorityValue = 2;
-                break;
-            default:
-                priorityValue = 1; // Giá trị mặc định
+        UUID scheduleID = (UUID) getIntent().getSerializableExtra("SCHEDULE_UUID");
+
+        if (scheduleID == null) {
+            showAlert("Schedule ID is required.");
+            return;
         }
 
-        try {
-            DbHelper dbHelper = new DbHelper(this, null);
-            long activityId = dbHelper.insertData(
-                "Activities",
-                new String[]{"title", "piority", "imageUrl", "type", "isDeleted"},
-                new String[]{title, String.valueOf(priorityValue), "image_placeholder", "0", "0"}
-            );
+        UUID activityID = UUID.randomUUID();
+        ActivityDTOs activityDTO = new ActivityDTOs(scheduleID, activityID, title, start, end);
 
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("activity_data", activityDTO);
+        setResult(RESULT_OK, resultIntent);
 
-            if (activityId != -1) {
-                dbHelper.insertData(
-                        "ActivityTrackLogs",
-                        new String[]{"schedulingId", "activityID", "startTime", "endTime", "status", "isDeleted"},
-                        new String[]{"1", String.valueOf(activityId), start, end, "0", "0"}
-                );
+        Toast.makeText(this, "Activity saved successfully!", Toast.LENGTH_SHORT).show();
+        finish();
 
-                Toast.makeText(this, "Activity saved successfully!", Toast.LENGTH_SHORT).show();
-            } else {
-                showAlert("Error saving activity.");
-            }
-
-            // Reset fields
-            titleInput.setText("");
-            priorityLabel.setText("Select priority level");
-            priorityLabel.setTextColor(Color.GRAY);
-            selectedPriority = null;
-            startTime.setText("Select Start Time");
-            endTime.setText("Select End Time");
-
-        } catch (Exception e) {
-            Toast.makeText(this, "Error saving data: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        saveActivityToFirebase(title, start, end, selectedPriority);
     }
 
+    private void saveActivityToFirebase(String title, String start, String end, String priority) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("activities");
+        String activityId = UUID.randomUUID().toString();
+
+        String userId = new SessionManager(this).getKeyId();
+
+        Map<String, Object> activityData = new HashMap<>();
+        activityData.put("id", activityId);
+        activityData.put("userId", userId);
+        activityData.put("title", title);
+        activityData.put("priority", priority);
+        activityData.put("startTime", start);
+        activityData.put("endTime", end);
+        activityData.put("isDeleted", false);
+        activityData.put("createdAt", System.currentTimeMillis());
+        activityData.put("imageUrl", imageUriString);
+        activityData.put("modifiedAt", System.currentTimeMillis());
+        activityData.put("modifiedBy", userId);
+
+        dbRef.child(activityId).setValue(activityData)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Activity saved successfully!", Toast.LENGTH_SHORT).show();
+                    resetFields();
+                    Log.d("FirebaseDebug", "Data saved: " + activityData.toString());
+                })
+                .addOnFailureListener(e -> {
+                    PopupHelper.shopPopup(this, "Save activity failed\nError: " + e.getMessage(), Color.WHITE, Color.RED);
+                    Log.e("FirebaseDebug", "Error saving data: " + e.getMessage());
+                });
+    }
+
+    private void resetFields() {
+        titleInput.setText("");
+        priorityLabel.setText("Select priority level");
+        priorityLabel.setTextColor(Color.GRAY);
+        selectedPriority = null;
+        startTime.setText("Select Start Time");
+        endTime.setText("Select End Time");
+    }
 
     private boolean isEndTimeValid(String start, String end) {
         try {
@@ -195,7 +217,6 @@ public class AddActivity extends Activity {
 
         return true;
     }
-
 
     private void onTimeSelect(TextView timeField) {
         Calendar calendar = Calendar.getInstance();
@@ -220,12 +241,27 @@ public class AddActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
-            attachmentPreview.setImageURI(imageUri);
-        } else {
-            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+        if (requestCode == ADD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                ActivityDTOs activityDTO = data.getParcelableExtra("activity_data");
+                if (activityDTO != null) {
+                    Log.d("ActivityResult", "Received activity: " + activityDTO.getTitle());
+                    handleReceivedActivity(activityDTO);
+                } else {
+                    Log.e("ActivityResult", "ActivityDTOs is null, key may be incorrect.");
+                }
+            } else {
+                Log.e("ActivityResult", "Intent data is null.");
+            }
         }
+    }
+
+    private void handleReceivedActivity(ActivityDTOs activityDTO) {
+    if (activityDTO != null) {
+        Log.d("ActivityHandler", "Received Activity: " + activityDTO.getTitle());
+    } else {
+        Log.e("ActivityHandler", "Received null activity");
+    }
     }
 
     private void showAlert(String message) {
