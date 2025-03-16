@@ -13,42 +13,75 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 
+import com.example.onebitmoblie.Activity.AddActivity;
 import com.example.onebitmoblie.Data.DatabaseEntities.Scheduling;
 import com.example.onebitmoblie.Data.SchedulingStatus;
 import com.example.onebitmoblie.R;
 import com.example.onebitmoblie.common.PopupHelper;
 import com.example.onebitmoblie.common.SessionManager;
 import com.example.onebitmoblie.homepage.HomeActivity;
-import com.example.onebitmoblie.login_register.RegisterActivity;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class ScheduleActivity extends Activity {
     private LinearLayout activityContainer;
     private TextView dateText;
     private Calendar calendar;
-
     private EditText title;
     private EditText description;
 
+    private static final byte REQUEST_CODE_CREATE_ACTIVITY = 1;
+    private static final byte REQUEST_CODE_UPDATE_ACTIVITY = 2;
+
+    private UUID scheduleUUID = UUID.randomUUID();
+    private LinearLayout activityLayout;
+    private List<ActivityDTOs> activities = new ArrayList<>();
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode == REQUEST_CODE_CREATE_ACTIVITY && resultCode == RESULT_OK && data != null)
+        {
+            ActivityDTOs activityCardModel = data.getParcelableExtra("ACTIVITY_CARD");
+            if(activityCardModel != null)
+            {
+                activities.add(activityCardModel);
+            }
+        }
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule);
+
+        generateUniqueUUID(uniqueUUID -> {
+            scheduleUUID = uniqueUUID; // Use the unique UUID
+        });
 
         activityContainer = findViewById(R.id.activity_container);
 
         ImageButton addActivityBtn = findViewById(R.id.add_activity_btn);
 
-        addActivityBtn.setOnClickListener(v -> addNewActivity());
+        addActivityBtn.setOnClickListener(v -> onAddActivity());
 
         Button saveBtn = findViewById(R.id.save_btn);
         saveBtn.setOnClickListener( v -> saveBtnClick());
@@ -104,6 +137,18 @@ public class ScheduleActivity extends Activity {
         activityContainer.addView(cardView, activityContainer.getChildCount() - 1);
     }
 
+    private void removeActivity(CardView cardView, int index)
+    {
+        //get the activity info will going to be remove
+        ActivityDTOs ac = activities.get(index);
+        //remove it from fb in activities
+
+        //remove activityCard info from list
+        activities.remove(index);
+        //remove layout view
+        activityContainer.removeView(cardView);
+    }
+
     private void saveSelectedDate()
     {
         dateText.setText(calendar.getTime().toString());
@@ -111,7 +156,7 @@ public class ScheduleActivity extends Activity {
 
     private void saveBtnClick()
     {
-        String scheduleID = UUID.randomUUID().toString();
+        String scheduleID = scheduleUUID.toString();
         String today = Calendar.getInstance().toString();
         String userID = new SessionManager(this).getKeyId();
 
@@ -137,16 +182,63 @@ public class ScheduleActivity extends Activity {
     {
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("scheduling");
         dbRef.child(schedule.getId()).setValue(schedule)
-                .addOnSuccessListener(aVoid -> {
-                    goHome();
-                    finish();
-                })
                 .addOnFailureListener(e -> {
                     PopupHelper.shopPopup(this," Save schedule fail\nError: " + e.getMessage(), Color.WHITE, Color.RED);
+                    return;
                 });
+
+        //save activityTrackLog
+        dbRef = FirebaseDatabase.getInstance().getReference("activityTrackLog");
+        for (var item: activities) {
+            dbRef.setValue(item);
+        }
+
+    }
+    private void generateUniqueUUID(Consumer<UUID> callback) {
+        UUID newUUID = UUID.randomUUID(); // Generate a new UUID
+
+        checkExistUUID(newUUID.toString()).addOnSuccessListener(exists -> {
+            if (exists) {
+                // If UUID exists, try again recursively
+                generateUniqueUUID(callback);
+            } else {
+                // If UUID is unique, return it
+                callback.accept(newUUID);
+            }
+        });
+    }
+
+    private Task<Boolean> checkExistUUID(String scheduleUUID)
+    {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("scheduling");
+        TaskCompletionSource<Boolean> taskSource = new TaskCompletionSource<>();
+        dbRef.orderByKey().equalTo(scheduleUUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                taskSource.setResult(dataSnapshot.exists()); // Set true if exists, false otherwise
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                taskSource.setResult(false); // Return false if Firebase fails
+            }
+        });
+        return taskSource.getTask();
     }
     private void goHome()
     {
         startActivity(new Intent(this, HomeActivity.class));
+    }
+
+    private void onAddActivity()
+    {
+        Intent intent = new Intent(this, AddActivity.class);
+        intent.putExtra("SCHEDULE_UUID",scheduleUUID);
+        startActivityForResult(intent, REQUEST_CODE_CREATE_ACTIVITY);
+    }
+    private void onUpdateActivity()
+    {
+        Intent intent = new Intent(this, AddActivity.class);
+        //transfer activity data to it?
+        startActivityForResult(intent, REQUEST_CODE_UPDATE_ACTIVITY);
     }
 }
