@@ -13,12 +13,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
 import com.example.onebitmoblie.Activity.AddActivity;
+import com.example.onebitmoblie.Data.DatabaseEntities.ActivityTrackLogs;
 import com.example.onebitmoblie.Data.DatabaseEntities.Scheduling;
 import com.example.onebitmoblie.Data.SchedulingStatus;
 import com.example.onebitmoblie.R;
@@ -59,10 +61,13 @@ public class ScheduleActivity extends Activity {
         super.onActivityResult(requestCode,resultCode,data);
         if(requestCode == REQUEST_CODE_CREATE_ACTIVITY && resultCode == RESULT_OK && data != null)
         {
-            ActivityDTOs activityCardModel = data.getParcelableExtra("ACTIVITY_CARD");
+            ActivityDTOs activityCardModel = data.getParcelableExtra("activity_data");
             if(activityCardModel != null)
             {
                 activities.add(activityCardModel);
+
+                int currentIdx = activities.indexOf(activityCardModel);
+                addNewActivityCard(activityCardModel,currentIdx);
             }
         }
     }
@@ -126,27 +131,39 @@ public class ScheduleActivity extends Activity {
         dateText.setText(sdf.format(calendar.getTime()));
     }
 
-    private void addNewActivity()
+    private void addNewActivityCard(ActivityDTOs info, int arrIndex)
     {
         LayoutInflater inflater = LayoutInflater.from(this);
         View cardView = inflater.inflate(R.layout.activity_card, activityContainer, false);
 
         View deleteBtn = cardView.findViewById(R.id.remove_card);
-        deleteBtn.setOnClickListener(v -> activityContainer.removeView(cardView));
+        TextView title = cardView.findViewById(R.id.activity_title);
+        TextView time = cardView.findViewById(R.id.activity_time);
 
+        title.setText(info.getTitle());
+        String timeTxt = info.getStartTime() + " - " + info.getEndTime();
+        time.setText(timeTxt);
+
+        deleteBtn.setOnClickListener(v -> removeActivity(cardView, arrIndex));
         activityContainer.addView(cardView, activityContainer.getChildCount() - 1);
     }
-
-    private void removeActivity(CardView cardView, int index)
+    private void removeActivity(View cardView, int index)
     {
         //get the activity info will going to be remove
         ActivityDTOs ac = activities.get(index);
         //remove it from fb in activities
-
-        //remove activityCard info from list
-        activities.remove(index);
-        //remove layout view
-        activityContainer.removeView(cardView);
+        var dbRef = FirebaseDatabase.getInstance().getReference("activities");
+        dbRef.child(ac.getActivityID().toString()).removeValue()
+                .addOnSuccessListener( v -> {
+                    //remove activityCard info from list
+                    activities.remove(index);
+                    //remove layout view
+                    activityContainer.removeView(cardView);
+                })
+                .addOnFailureListener(v ->{
+                    PopupHelper.shopPopup(this, "Remove activity failed!"
+                            , Color.RED, Color.WHITE);
+                });
     }
 
     private void saveSelectedDate()
@@ -184,15 +201,26 @@ public class ScheduleActivity extends Activity {
         dbRef.child(schedule.getId()).setValue(schedule)
                 .addOnFailureListener(e -> {
                     PopupHelper.shopPopup(this," Save schedule fail\nError: " + e.getMessage(), Color.WHITE, Color.RED);
-                    return;
                 });
 
         //save activityTrackLog
         dbRef = FirebaseDatabase.getInstance().getReference("activityTrackLog");
         for (var item: activities) {
-            dbRef.setValue(item);
+            var log = mapping(item);
+            dbRef.child(log.getId()).setValue(log)
+                    .addOnFailureListener(e ->{
+                        PopupHelper.shopPopup(this," Save activity log fail\nError: " + e.getMessage(), Color.WHITE, Color.RED);
+                    });
         }
 
+        goHome();
+        finish();
+    }
+    private ActivityTrackLogs mapping(ActivityDTOs ac)
+    {
+        if(ac == null) return null;
+        return new ActivityTrackLogs(UUID.randomUUID().toString(),false, java.util.Calendar.getInstance().toString(),null,null
+        ,ac.getActivityID().toString(), ac.getScheduleID().toString(), ac.getStartTime(), ac.getEndTime(), true);
     }
     private void generateUniqueUUID(Consumer<UUID> callback) {
         UUID newUUID = UUID.randomUUID(); // Generate a new UUID

@@ -136,7 +136,7 @@ public class AddActivity extends Activity {
             return;
         }
 
-        UUID scheduleID = (UUID) getIntent().getSerializableExtra("schedule_id"); 
+        UUID scheduleID = (UUID) getIntent().getSerializableExtra("SCHEDULE_UUID");
 
         if (scheduleID == null) {
             showAlert("Schedule ID is required.");
