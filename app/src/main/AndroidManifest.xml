@@ -2,18 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/logothethaodep"
+        android:icon="@drawable/logosystem"
         android:label="@string/app_title"
 		android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logosystem"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ONEBITMOBLIE"
         tools:targetApi="31">
         <!-- Register Activity -->
         <activity
@@ -31,12 +31,15 @@
             android:label="ONEBITMOBILE"
             android:theme="@style/Theme.ONEBITMOBLIE">
         </activity>
+        
         <activity android:name=".profile.ProfileActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="false" />
+
         <activity android:name=".schedule.ScheduleActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="true"/>
+
         <activity android:name=".settings.SettingActivity"
             android:theme="@style/Theme.ONEBITMOBLIE"
             android:exported="false"/>
