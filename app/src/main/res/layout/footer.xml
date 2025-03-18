@@ -23,7 +23,8 @@
                 android:background="@null"
                 android:drawableTop="@drawable/home"
                 android:text="Home"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:onClick="goToHome"/>
 
             <!-- Button ở góc dưới phải -->
             <Button
@@ -46,7 +47,8 @@
                 android:background="@null"
                 android:drawableTop="@drawable/notification"
                 android:text="Notification"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:onClick="goToNotification"/>
 
             <Button
                 android:id="@+id/btnProfile"
@@ -57,7 +59,8 @@
                 android:background="@null"
                 android:drawableTop="@drawable/profile"
                 android:text="Profile"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:onClick="goToProfile"/>
         </FrameLayout>
 
 

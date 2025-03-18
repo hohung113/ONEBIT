@@ -22,7 +22,7 @@
                 android:drawableStart="@drawable/baseline_keyboard_backspace_24"
                 android:drawablePadding="5dp"
                 android:padding="5dp"
-                android:onClick="goBack"/>
+                android:onClick="gotoSettings"/>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -23,6 +23,8 @@ import com.example.onebitmoblie.login_register.LoginActivity;
 
 import java.io.IOException;
 import java.util.List;
+
+import com.example.onebitmoblie.settings.SettingActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
@@ -162,6 +164,10 @@ public class ProfileActivity extends Activity {
 
     public void goBack(android.view.View view){
         onBackPressed();
+    }
+    public void gotoSettings(android.view.View view){
+        Intent intent = new Intent(ProfileActivity.this, SettingActivity.class);
+        startActivity(intent);
     }
 
     private void showEditDialog(String title, String hint, String currentValue, TextView textView, String dbColumn) {
